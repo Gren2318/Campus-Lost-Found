@@ -15,9 +15,9 @@ const PostItem = () => {
   const [formData, setFormData] = useState({
     title: '',
     description: '',
+    category: 'Lost',
     location: '',
-    category: 'Lost', // Default
-    date: new Date().toISOString().split('T')[0]
+    date_lost: new Date().toISOString().split('T')[0]
   });
 
   // Handle Image Selection
@@ -25,55 +25,71 @@ const PostItem = () => {
     const file = e.target.files[0];
     if (file) {
       setImage(file);
-      setPreview(URL.createObjectURL(file)); // Show preview
+      setPreview(URL.createObjectURL(file));
     }
   };
 
-  // 🧠 THE AI MAGIC
+  // 🧠 AI Analysis Function
   const handleAnalyze = async () => {
     if (!image) return alert("Please upload an image first!");
     
     setAnalyzing(true);
     try {
-      // Create FormData to send file
       const data = new FormData();
       data.append('file', image);
 
-      // Call your Backend Endpoint (Phase 4)
       const response = await api.post('/analyze', data, {
         headers: { 'Content-Type': 'multipart/form-data' }
       });
 
-      // Auto-fill the description with AI result
       if (response.data.description) {
         setFormData(prev => ({
           ...prev,
           description: response.data.description,
-          title: "Found Item: " + response.data.description.split(' ').slice(0, 3).join(' ') + "..."
+          title: "Found: " + response.data.description.split(' ').slice(0, 3).join(' ') + "..."
         }));
-      } else {
-        alert("AI could not describe the image. Try again.");
       }
-      
     } catch (error) {
       console.error("AI Error:", error);
-      alert("AI Service is offline (Check Colab!). Using manual entry.");
+      alert("AI Service is offline. Using manual entry.");
     } finally {
       setAnalyzing(false);
     }
   };
 
-  // Handle Form Submit (Save to DB - We will build this backend part later)
+  // 💾 REAL SUBMIT FUNCTION (Updated)
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    
-    // For now, we just simulate a success because we haven't built the 'create item' API yet
-    setTimeout(() => {
-      alert("Item Posted Successfully! (Simulation)");
+
+    try {
+      // 1. Create FormData to send text + image
+      const submitData = new FormData();
+      submitData.append('title', formData.title);
+      submitData.append('description', formData.description);
+      submitData.append('category', formData.category);
+      submitData.append('location', formData.location);
+      submitData.append('date_lost', formData.date_lost);
+      
+      if (image) {
+        submitData.append('file', image);
+      }
+
+      // 2. Send to Backend
+      await api.post('/items/', submitData, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+      });
+
+      // 3. Success!
+      alert("Item Posted Successfully!");
+      navigate('/'); // Redirect to Home
+
+    } catch (error) {
+      console.error("Post Error:", error);
+      alert("Failed to post item. Check console for details.");
+    } finally {
       setLoading(false);
-      navigate('/');
-    }, 1000);
+    }
   };
 
   return (
@@ -84,7 +100,7 @@ const PostItem = () => {
 
       <div className="bg-slate-800 rounded-2xl p-6 border border-slate-700 shadow-xl">
         
-        {/* 1. Image Upload Area */}
+        {/* Image Upload Area */}
         <div className="mb-8 text-center">
           {preview ? (
             <div className="relative inline-block">
@@ -109,9 +125,9 @@ const PostItem = () => {
           {/* AI Button */}
           {image && (
             <button 
+              type="button" // Important: prevents form submission
               onClick={handleAnalyze}
               disabled={analyzing}
-              type="button"
               className={`mt-4 px-6 py-2 rounded-full font-medium flex items-center gap-2 mx-auto transition-all ${
                 analyzing ? 'bg-purple-900/50 text-purple-300' : 'bg-purple-600 hover:bg-purple-700 text-white shadow-lg shadow-purple-900/20'
               }`}
@@ -122,7 +138,7 @@ const PostItem = () => {
           )}
         </div>
 
-        {/* 2. The Form */}
+        {/* The Form */}
         <form onSubmit={handleSubmit} className="space-y-6">
           
           <div>
@@ -133,6 +149,7 @@ const PostItem = () => {
               onChange={e => setFormData({...formData, title: e.target.value})}
               className="w-full bg-slate-900 border border-slate-700 rounded-lg p-3 text-white focus:border-blue-500 outline-none"
               placeholder="e.g. Blue Backpack"
+              required
             />
           </div>
 
@@ -144,6 +161,7 @@ const PostItem = () => {
               onChange={e => setFormData({...formData, description: e.target.value})}
               className="w-full bg-slate-900 border border-slate-700 rounded-lg p-3 text-white focus:border-blue-500 outline-none"
               placeholder="Describe the item..."
+              required
             />
           </div>
 
@@ -169,6 +187,7 @@ const PostItem = () => {
                   onChange={e => setFormData({...formData, location: e.target.value})}
                   className="w-full bg-slate-900 border border-slate-700 rounded-lg p-3 pl-10 text-white focus:border-blue-500 outline-none"
                   placeholder="e.g. Library"
+                  required
                 />
               </div>
             </div>
