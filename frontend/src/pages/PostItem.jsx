@@ -2,9 +2,11 @@ import { useState } from 'react';
 import { Camera, MapPin, Loader, Sparkles } from 'lucide-react';
 import api from '../services/api';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/useAuth';
 
 const PostItem = () => {
   const navigate = useNavigate();
+  const { user } = useAuth(); // 👈 CHANGED: Get the logged-in user
   
   // State for the form
   const [image, setImage] = useState(null);
@@ -70,6 +72,13 @@ const PostItem = () => {
       submitData.append('category', formData.category);
       submitData.append('location', formData.location);
       submitData.append('date_lost', formData.date_lost);
+      
+      // 👈 CHANGED: Send the REAL user's email/ID
+      if (user && user.email) {
+          submitData.append('owner_id', user.email); 
+      } else {
+          submitData.append('owner_id', 'anonymous');
+      }
       
       if (image) {
         submitData.append('file', image);

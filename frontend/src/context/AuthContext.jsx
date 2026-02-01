@@ -1,54 +1,57 @@
-import { createContext, useState, useEffect } from 'react';
-import api from '../services/api';
+import { createContext, useState, useEffect } from "react";
+import api from "../services/api";
 
-export const AuthContext = createContext();
+// 1. Export the Context object itself
+export const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // Check if user is already logged in when app starts
   useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (token) {
-      setUser({ token }); 
-    }
-    setLoading(false);
+    const checkLogin = async () => {
+      const token = localStorage.getItem("token");
+
+      if (token) {
+        try {
+          // ✅ FIXED: Changed /users/me to /api/auth/me
+          const res = await api.get("/api/auth/me");
+          setUser(res.data);
+        } catch (error) {
+          console.error("Auto-login failed:", error);
+          localStorage.removeItem("token");
+          setUser(null);
+        }
+      }
+      setLoading(false);
+    };
+    checkLogin();
   }, []);
 
-  // ✅ FIXED LOGIN FUNCTION
   const login = async (email, password) => {
-    try {
-      // 1. Send JSON data to the correct endpoint
-      const response = await api.post('/api/auth/login', { 
-        email: email, 
-        password: password 
-      });
-      
-      // 2. Get the token from response
-      const { access_token } = response.data;
-      
-      // 3. Save to Local Storage and State
-      localStorage.setItem('token', access_token);
-      setUser({ token: access_token });
-      
-      return true;
-    } catch (error) {
-      console.error("Login Error:", error.response?.data || error.message);
-      throw error; // Pass error to Login page to show "Invalid credentials"
-    }
+    // 1. Send Login Request (JSON)
+    // Note: If this gives 422, ensure your backend accepts JSON login or switch to FormData
+    const response = await api.post("/api/auth/login", {
+      email: email,       
+      password: password 
+    });
+
+    // 2. Save token
+    localStorage.setItem("token", response.data.access_token);
+
+    // 3. Get user details
+    // ✅ FIXED: Changed /users/me to /api/auth/me
+    const userRes = await api.get("/api/auth/me");
+    setUser(userRes.data);
   };
 
   const logout = () => {
-    localStorage.removeItem('token');
+    localStorage.removeItem("token");
     setUser(null);
   };
 
-  // ✅ FIXED REGISTER FUNCTION
-  const register = async (userData) => {
-    // Matches your Swagger: /api/auth/register
-    await api.post('/api/auth/register', userData);
-    return true;
+  const register = async (data) => {
+    await api.post("/api/auth/register", data);
   };
 
   return (

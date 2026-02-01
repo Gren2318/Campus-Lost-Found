@@ -1,5 +1,5 @@
 import { useState, useContext } from 'react';
-import { AuthContext } from '../context/AuthContext';
+import { useAuth } from '../context/useAuth';
 import { useNavigate, Link } from 'react-router-dom';
 import { LogIn, User, Lock } from 'lucide-react';
 
@@ -7,7 +7,7 @@ const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-  const { login } = useContext(AuthContext);
+  const { login } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -18,6 +18,7 @@ const Login = () => {
       navigate('/'); // Redirect to Home after login
     } catch (err) {
       setError('Invalid email or password');
+      console.log(err);
     }
   };
 
