@@ -1,12 +1,12 @@
 import { useState } from 'react';
-import { Camera, MapPin, Loader, Sparkles } from 'lucide-react';
+import { Camera, MapPin, Loader, Sparkles, Upload } from 'lucide-react';
 import api from '../services/api';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/useAuth';
 
 const PostItem = () => {
   const navigate = useNavigate();
-  const { user } = useAuth(); // 👈 CHANGED: Get the logged-in user
+  const { user } = useAuth();
   
   // State for the form
   const [image, setImage] = useState(null);
@@ -22,23 +22,12 @@ const PostItem = () => {
     date_lost: new Date().toISOString().split('T')[0]
   });
 
-  // Handle Image Selection
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setImage(file);
-      setPreview(URL.createObjectURL(file));
-    }
-  };
-
   // 🧠 AI Analysis Function
-  const handleAnalyze = async () => {
-    if (!image) return alert("Please upload an image first!");
-    
+  const handleAnalyze = async (selectedFile) => {
     setAnalyzing(true);
     try {
       const data = new FormData();
-      data.append('file', image);
+      data.append('file', selectedFile);
 
       const response = await api.post('/analyze', data, {
         headers: { 'Content-Type': 'multipart/form-data' }
@@ -48,24 +37,35 @@ const PostItem = () => {
         setFormData(prev => ({
           ...prev,
           description: response.data.description,
-          title: "Found: " + response.data.description.split(' ').slice(0, 3).join(' ') + "..."
+          title: response.data.title || "Found: " + response.data.description.split(' ').slice(0, 3).join(' ') + "...",
+          category: response.data.category || prev.category // Use AI category if available
         }));
       }
     } catch (error) {
       console.error("AI Error:", error);
-      alert("AI Service is offline. Using manual entry.");
+      // Optional: don't alert here to avoid annoying popups if it fails silently
     } finally {
       setAnalyzing(false);
     }
   };
 
-  // 💾 REAL SUBMIT FUNCTION (Updated)
+  // Handle Image Selection
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setImage(file);
+      setPreview(URL.createObjectURL(file));
+      // 👇 Auto-trigger analysis immediately
+      handleAnalyze(file);
+    }
+  };
+
+  // 💾 REAL SUBMIT FUNCTION
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
 
     try {
-      // 1. Create FormData to send text + image
       const submitData = new FormData();
       submitData.append('title', formData.title);
       submitData.append('description', formData.description);
@@ -73,7 +73,6 @@ const PostItem = () => {
       submitData.append('location', formData.location);
       submitData.append('date_lost', formData.date_lost);
       
-      // 👈 CHANGED: Send the REAL user's email/ID
       if (user && user.email) {
           submitData.append('owner_id', user.email); 
       } else {
@@ -84,14 +83,12 @@ const PostItem = () => {
         submitData.append('file', image);
       }
 
-      // 2. Send to Backend
       await api.post('/items/', submitData, {
         headers: { 'Content-Type': 'multipart/form-data' }
       });
 
-      // 3. Success!
       alert("Item Posted Successfully!");
-      navigate('/'); // Redirect to Home
+      navigate('/'); 
 
     } catch (error) {
       console.error("Post Error:", error);
@@ -104,46 +101,38 @@ const PostItem = () => {
   return (
     <div className="max-w-2xl mx-auto p-6">
       <h1 className="text-3xl font-bold text-white mb-8 flex items-center gap-3">
-        <Camera className="text-blue-500" /> Post Lost/Found Item
+        <Camera className="text-purple-500" /> Post Lost Item
       </h1>
 
-      <div className="bg-slate-800 rounded-2xl p-6 border border-slate-700 shadow-xl">
+      <div className="bg-slate-800 rounded-2xl p-8 border border-slate-700 shadow-xl">
         
-        {/* Image Upload Area */}
-        <div className="mb-8 text-center">
+        {/* Image Upload Area - Styled */}
+        <div className="mb-8 relative border-2 border-dashed border-slate-600 rounded-xl p-4 text-center hover:bg-slate-700/50 transition-colors group">
+          <input 
+            type="file" 
+            className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-20" 
+            onChange={handleImageChange} 
+            accept="image/*" 
+          />
+
           {preview ? (
-            <div className="relative inline-block">
-              <img src={preview} alt="Preview" className="max-h-64 rounded-lg shadow-lg border-2 border-slate-600" />
-              <button 
-                onClick={() => {setImage(null); setPreview(null)}}
-                className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600"
-              >
-                ×
-              </button>
+            <div className="relative inline-block z-10">
+              <img src={preview} alt="Preview" className="max-h-64 rounded-lg shadow-lg border border-slate-600 mx-auto" />
+              
+              {/* 🧠 Magic AI Overlay */}
+              {analyzing && (
+                <div className="absolute inset-0 bg-black/60 flex flex-col items-center justify-center rounded-lg backdrop-blur-sm">
+                  <Sparkles className="text-yellow-400 animate-spin mb-2" size={40} />
+                  <p className="font-bold text-yellow-400 animate-pulse text-sm">AI is identifying item...</p>
+                </div>
+              )}
             </div>
           ) : (
-            <label className="flex flex-col items-center justify-center w-full h-48 border-2 border-slate-600 border-dashed rounded-xl cursor-pointer hover:bg-slate-700/50 transition-all group">
-              <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                <Camera className="w-10 h-10 mb-3 text-slate-400 group-hover:text-blue-400 transition-colors" />
-                <p className="mb-2 text-sm text-slate-400">Click to upload photo</p>
-              </div>
-              <input type="file" className="hidden" onChange={handleImageChange} accept="image/*" />
-            </label>
-          )}
-
-          {/* AI Button */}
-          {image && (
-            <button 
-              type="button" // Important: prevents form submission
-              onClick={handleAnalyze}
-              disabled={analyzing}
-              className={`mt-4 px-6 py-2 rounded-full font-medium flex items-center gap-2 mx-auto transition-all ${
-                analyzing ? 'bg-purple-900/50 text-purple-300' : 'bg-purple-600 hover:bg-purple-700 text-white shadow-lg shadow-purple-900/20'
-              }`}
-            >
-              {analyzing ? <Loader className="animate-spin" size={18}/> : <Sparkles size={18}/>}
-              {analyzing ? 'Analyzing Image...' : 'Auto-Generate Description'}
-            </button>
+            <div className="flex flex-col items-center py-8 text-slate-400 group-hover:text-white transition-colors">
+              <Upload size={48} className="mb-4" />
+              <p className="text-lg font-medium">Click to upload photo</p>
+              <p className="text-sm text-slate-500">AI will auto-fill details for you ✨</p>
+            </div>
           )}
         </div>
 
@@ -156,20 +145,8 @@ const PostItem = () => {
               type="text" 
               value={formData.title}
               onChange={e => setFormData({...formData, title: e.target.value})}
-              className="w-full bg-slate-900 border border-slate-700 rounded-lg p-3 text-white focus:border-blue-500 outline-none"
-              placeholder="e.g. Blue Backpack"
-              required
-            />
-          </div>
-
-          <div>
-            <label className="block text-slate-400 text-sm font-medium mb-1">Description (AI Auto-filled)</label>
-            <textarea 
-              rows="3"
-              value={formData.description}
-              onChange={e => setFormData({...formData, description: e.target.value})}
-              className="w-full bg-slate-900 border border-slate-700 rounded-lg p-3 text-white focus:border-blue-500 outline-none"
-              placeholder="Describe the item..."
+              className="w-full bg-slate-900 border border-slate-700 rounded-lg p-3 text-white focus:border-purple-500 outline-none transition-colors"
+              placeholder={analyzing ? "AI is writing title..." : "e.g. Blue Backpack"}
               required
             />
           </div>
@@ -180,7 +157,7 @@ const PostItem = () => {
               <select 
                 value={formData.category}
                 onChange={e => setFormData({...formData, category: e.target.value})}
-                className="w-full bg-slate-900 border border-slate-700 rounded-lg p-3 text-white focus:border-blue-500 outline-none"
+                className="w-full bg-slate-900 border border-slate-700 rounded-lg p-3 text-white focus:border-purple-500 outline-none"
               >
                 <option>Lost</option>
                 <option>Found</option>
@@ -194,7 +171,7 @@ const PostItem = () => {
                   type="text" 
                   value={formData.location}
                   onChange={e => setFormData({...formData, location: e.target.value})}
-                  className="w-full bg-slate-900 border border-slate-700 rounded-lg p-3 pl-10 text-white focus:border-blue-500 outline-none"
+                  className="w-full bg-slate-900 border border-slate-700 rounded-lg p-3 pl-10 text-white focus:border-purple-500 outline-none"
                   placeholder="e.g. Library"
                   required
                 />
@@ -202,12 +179,26 @@ const PostItem = () => {
             </div>
           </div>
 
+          <div>
+            <label className="block text-slate-400 text-sm font-medium mb-1">Description</label>
+            <textarea 
+              rows="4"
+              value={formData.description}
+              onChange={e => setFormData({...formData, description: e.target.value})}
+              className="w-full bg-slate-900 border border-slate-700 rounded-lg p-3 text-white focus:border-purple-500 outline-none"
+              placeholder={analyzing ? "AI is describing the item..." : "Describe the item..."}
+              required
+            />
+          </div>
+
           <button 
             type="submit" 
-            disabled={loading}
-            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl transition-all"
+            disabled={loading || analyzing}
+            className={`w-full py-4 rounded-xl font-bold text-lg flex items-center justify-center gap-2 transition-all ${
+              loading ? 'bg-slate-700 cursor-not-allowed' : 'bg-purple-600 hover:bg-purple-700 shadow-lg shadow-purple-900/20 text-white'
+            }`}
           >
-            {loading ? 'Posting...' : 'Post Item'}
+            {loading ? <Loader className="animate-spin" /> : 'Post Item'}
           </button>
 
         </form>

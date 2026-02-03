@@ -1,17 +1,14 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Navbar from './components/Navbar';
-
-// 👇 CHANGE 1: Import Provider from the Context file
 import { AuthProvider } from './context/AuthContext'; 
-
-// 👇 CHANGE 2: Import Hook from the new Hook file
 import { useAuth } from './context/useAuth'; 
-
 import Login from './pages/Login';
 import PostItem from './pages/PostItem';
 import Home from './pages/Home';
 import Landing from './pages/Landing';
 import Register from './pages/Register';
+import ItemDetail from './pages/ItemDetail';
+import Profile from './pages/Profile';
 
 const ProtectedRoute = ({ children }) => {
   const { user, loading } = useAuth();
@@ -35,11 +32,20 @@ function App() {
             <Route path="/" element={<RootRoute />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
+            <Route path="/items/:id" element={<ItemDetail />} />
             <Route 
               path="/post" 
               element={
                 <ProtectedRoute>
                   <PostItem />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/profile" 
+              element={
+                <ProtectedRoute>
+                  <Profile />
                 </ProtectedRoute>
               } 
             />

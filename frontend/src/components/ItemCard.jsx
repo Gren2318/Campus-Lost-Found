@@ -1,4 +1,5 @@
 import { MapPin, Calendar } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const ItemCard = ({ item }) => {
   // Construct image URL (points to your local backend folder)
@@ -7,7 +8,10 @@ const ItemCard = ({ item }) => {
     : 'https://via.placeholder.com/400x300?text=No+Image';
 
   return (
-    <div className="bg-slate-800 rounded-xl overflow-hidden border border-slate-700 shadow-lg hover:shadow-2xl transition-all hover:-translate-y-1">
+    <Link 
+      to={`/items/${item._id}`} 
+      className="block bg-slate-800 rounded-xl overflow-hidden border border-slate-700 shadow-lg hover:shadow-2xl transition-all hover:-translate-y-1"
+    >
       <div className="h-48 overflow-hidden relative group">
         <img 
           src={imageUrl} 
@@ -34,7 +38,7 @@ const ItemCard = ({ item }) => {
           </div>
         </div>
       </div>
-    </div>
+    </Link>
   );
 };
 

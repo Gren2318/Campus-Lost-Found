@@ -26,10 +26,12 @@ const Navbar = () => {
                   <span>Post Item</span>
                 </Link>
                 
-                <div className="flex items-center gap-2 text-slate-300 ml-2">
-                  <User size={18} />
-                  <span className="hidden md:inline text-sm">{user.email?.split('@')[0]}</span>
-                </div>
+                <Link to="/profile" className="flex items-center gap-2 text-slate-300 ml-2 hover:text-white transition-colors">
+                  <div className="bg-slate-700 p-1.5 rounded-full">
+                    <User size={16} />
+                  </div>
+                  <span className="hidden md:inline text-sm font-medium">{user.email?.split('@')[0]}</span>
+                </Link>
 
                 <button 
                   onClick={logout} 
