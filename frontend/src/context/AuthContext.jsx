@@ -1,7 +1,6 @@
 import { createContext, useState, useEffect } from "react";
 import api from "../services/api";
 
-// 1. Export the Context object itself
 export const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
@@ -14,7 +13,6 @@ export const AuthProvider = ({ children }) => {
 
       if (token) {
         try {
-          // ✅ FIXED: Changed /users/me to /api/auth/me
           const res = await api.get("/api/auth/me");
           setUser(res.data);
         } catch (error) {
@@ -29,18 +27,13 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const login = async (email, password) => {
-    // 1. Send Login Request (JSON)
-    // Note: If this gives 422, ensure your backend accepts JSON login or switch to FormData
     const response = await api.post("/api/auth/login", {
       email: email,       
       password: password 
     });
 
-    // 2. Save token
     localStorage.setItem("token", response.data.access_token);
 
-    // 3. Get user details
-    // ✅ FIXED: Changed /users/me to /api/auth/me
     const userRes = await api.get("/api/auth/me");
     setUser(userRes.data);
   };

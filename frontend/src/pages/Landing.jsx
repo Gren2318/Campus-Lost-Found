@@ -5,7 +5,6 @@ const Landing = () => {
   return (
     <div className="min-h-screen bg-slate-900 text-white flex flex-col">
       
-      {/* Hero Section */}
       <div className="flex-1 flex flex-col items-center justify-center text-center px-6 py-20">
         <h1 className="text-5xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
           CampusConnect
@@ -31,7 +30,6 @@ const Landing = () => {
         </div>
       </div>
 
-      {/* Features Grid */}
       <div className="grid md:grid-cols-3 gap-8 px-6 pb-20 max-w-6xl mx-auto">
         <div className="bg-slate-800/50 p-6 rounded-2xl border border-slate-700">
           <Search className="w-10 h-10 text-blue-400 mb-4" />

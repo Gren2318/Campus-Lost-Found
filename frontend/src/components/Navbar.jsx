@@ -9,18 +9,16 @@ import {
   MessageCircle, 
   ShieldAlert, 
   ShieldCheck, 
-  Menu, // 👈 Hamburger Icon
-  X     // 👈 Close Icon
+  Menu, 
+  X     
 } from 'lucide-react';
 
 const Navbar = () => {
   const { user, logout } = useAuth();
   const location = useLocation();
-  const [isOpen, setIsOpen] = useState(false); // 📱 State for Mobile Menu
+  const [isOpen, setIsOpen] = useState(false);
 
   const isActive = (path) => location.pathname === path;
-  
-  // Helper to close menu when a link is clicked
   const closeMenu = () => setIsOpen(false);
 
   return (
@@ -28,7 +26,6 @@ const Navbar = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           
-          {/* 📱 MOBILE: Hamburger Icon (Left) */}
           <div className="flex md:hidden">
             <button
               onClick={() => setIsOpen(!isOpen)}
@@ -38,7 +35,6 @@ const Navbar = () => {
             </button>
           </div>
 
-          {/* 🌟 LOGO (Desktop: Left | Mobile: Right via flex logic) */}
           <Link 
             to="/" 
             className="text-xl md:text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent hover:opacity-80 transition-opacity flex items-center gap-2"
@@ -46,11 +42,9 @@ const Navbar = () => {
             CampusConnect
           </Link>
 
-          {/* 🖥️ DESKTOP MENU (Hidden on Mobile) */}
           <div className="hidden md:flex items-center gap-6">
             {user ? (
               <>
-                {/* Admin Logs */}
                 {user.role === 'admin' && (
                   <Link 
                     to="/admin/logs" 
@@ -65,24 +59,20 @@ const Navbar = () => {
                   </Link>
                 )}
 
-                {/* Home */}
                 <Link to="/" className={`p-2 rounded-full transition-colors ${isActive('/') ? 'text-white bg-slate-700' : 'text-slate-300 hover:text-white'}`}>
                   <Home size={22} />
                 </Link>
 
-                {/* Messages */}
                 <Link to="/inbox" className={`p-2 rounded-full transition-colors relative ${isActive('/inbox') ? 'text-white bg-slate-700' : 'text-slate-300 hover:text-white'}`}>
                   <MessageCircle size={22} />
                   <span className="absolute top-1.5 right-1.5 w-2.5 h-2.5 bg-red-500 border-2 border-slate-800 rounded-full animate-pulse"></span>
                 </Link>
 
-                {/* Post Item */}
                 <Link to="/post" className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-full font-medium transition-all shadow-lg shadow-blue-500/20">
                   <PlusCircle size={18} />
                   <span>Post Item</span>
                 </Link>
 
-                {/* Profile */}
                 <Link to="/profile" className={`flex items-center gap-2 transition-colors ${isActive('/profile') ? 'text-white' : 'text-slate-300 hover:text-white'}`}>
                   <div className="bg-slate-700 p-1.5 rounded-full">
                     <User size={18} />
@@ -97,7 +87,6 @@ const Navbar = () => {
                   </div>
                 </Link>
 
-                {/* Logout */}
                 <button onClick={logout} className="p-2 text-slate-400 hover:text-red-400 hover:bg-slate-700/50 rounded-full transition-all">
                   <LogOut size={20} />
                 </button>
@@ -111,14 +100,12 @@ const Navbar = () => {
         </div>
       </div>
 
-      {/* 📱 MOBILE DROPDOWN MENU (Visible only when Open) */}
       {isOpen && (
         <div className="md:hidden bg-slate-900 border-b border-slate-700 animate-fadeIn">
           <div className="px-4 pt-2 pb-6 space-y-2">
             
             {user ? (
               <>
-                {/* Mobile Profile Section */}
                 <div className="flex items-center gap-3 p-3 bg-slate-800 rounded-lg mb-4 border border-slate-700">
                   <div className="bg-purple-600 p-2 rounded-full text-white">
                     <User size={20} />
@@ -151,7 +138,6 @@ const Navbar = () => {
                   <User size={20} /> My Profile
                 </Link>
 
-                {/* Admin Only Link Mobile */}
                 {user.role === 'admin' && (
                   <Link to="/admin/logs" onClick={closeMenu} className="flex items-center gap-3 text-red-400 hover:text-red-300 hover:bg-red-900/20 px-3 py-3 rounded-lg transition-colors border border-red-900/30">
                     <ShieldAlert size={20} /> Security Logs

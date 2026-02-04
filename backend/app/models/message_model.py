@@ -3,7 +3,7 @@ from datetime import datetime
 from typing import Optional
 
 class MessageCreate(BaseModel):
-    receiver_id: str # Email of the person receiving the message
+    receiver_id: str
     content: str
 
 class MessageResponse(BaseModel):

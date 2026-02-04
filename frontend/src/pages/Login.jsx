@@ -15,7 +15,7 @@ const Login = () => {
     setError('');
     try {
       await login(email, password);
-      navigate('/'); // Redirect to Home after login
+      navigate('/'); 
     } catch (err) {
       setError('Invalid email or password');
       console.log(err);
@@ -26,13 +26,11 @@ const Login = () => {
     <div className="min-h-[80vh] flex items-center justify-center px-4">
       <div className="max-w-md w-full bg-slate-800 rounded-2xl shadow-xl border border-slate-700 overflow-hidden">
         
-        {/* Header */}
         <div className="bg-gradient-to-r from-blue-600 to-purple-600 p-8 text-center">
           <h2 className="text-3xl font-bold text-white mb-2">Welcome Back</h2>
           <p className="text-blue-100">Login to report or find lost items.</p>
         </div>
 
-        {/* Form */}
         <div className="p-8">
           {error && (
             <div className="bg-red-500/10 border border-red-500 text-red-400 p-3 rounded-lg mb-6 text-sm text-center">
@@ -42,7 +40,6 @@ const Login = () => {
 
           <form onSubmit={handleSubmit} className="space-y-6">
             
-            {/* Email Input */}
             <div>
               <label className="block text-sm font-medium text-slate-400 mb-1">Email Address</label>
               <div className="relative">
@@ -58,7 +55,6 @@ const Login = () => {
               </div>
             </div>
 
-            {/* Password Input */}
             <div>
               <label className="block text-sm font-medium text-slate-400 mb-1">Password</label>
               <div className="relative">

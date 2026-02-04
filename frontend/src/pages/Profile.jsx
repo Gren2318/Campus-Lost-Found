@@ -24,7 +24,6 @@ const Profile = () => {
     fetchMyItems();
   }, []);
 
-  // Delete Function
   const handleDelete = async (itemId) => {
     if (!window.confirm("Are you sure you want to delete this post?")) return;
 
@@ -39,8 +38,6 @@ const Profile = () => {
 
   return (
     <div className="max-w-6xl mx-auto p-6">
-      
-      {/* Profile Header */}
       <div className="bg-slate-800 rounded-2xl p-8 mb-10 border border-slate-700 flex flex-col md:flex-row items-center justify-between gap-6">
         <div className="flex items-center gap-4">
           <div className="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center text-white shadow-lg">
@@ -60,7 +57,6 @@ const Profile = () => {
         </button>
       </div>
 
-      {/* My Items */}
       <h2 className="text-xl font-bold text-white mb-6 border-l-4 border-purple-500 pl-4">
         My Posted Items ({items.length})
       </h2>
@@ -73,13 +69,11 @@ const Profile = () => {
             items.map(item => (
               <div key={item._id} className="relative group">
                 
-                {/* Card */}
                 <ItemCard item={item} />
 
-                {/* Delete Button Overlay */}
                 <button
                   onClick={(e) => {
-                    e.preventDefault(); // Prevent navigation
+                    e.preventDefault(); 
                     handleDelete(item._id);
                   }}
                   className="absolute top-2 left-2 bg-red-600 text-white p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity shadow-lg hover:bg-red-700 z-10"

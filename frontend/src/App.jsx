@@ -3,7 +3,6 @@ import Navbar from './components/Navbar';
 import { AuthProvider } from './context/AuthContext'; 
 import { useAuth } from './context/useAuth'; 
 
-// Pages
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Landing from './pages/Landing';
@@ -13,10 +12,8 @@ import ItemDetail from './pages/ItemDetail';
 import Profile from './pages/Profile';
 import ChatPage from './pages/ChatPage';
 import Inbox from './pages/Inbox';
-import AdminChatLog from './pages/AdminChatLog'; // 👈 Import Admin Page
+import AdminChatLog from './pages/AdminChatLog'; 
 
-// 🔒 Security Wrapper
-// If not logged in, redirects to Landing page
 const ProtectedRoute = ({ children }) => {
   const { user, loading } = useAuth();
   
@@ -25,8 +22,6 @@ const ProtectedRoute = ({ children }) => {
   return user ? children : <Navigate to="/landing" replace />;
 };
 
-// 🏠 Root Logic
-// If logged in -> Home Feed. If Guest -> Landing Page.
 const RootRoute = () => {
   const { user, loading } = useAuth();
   if (loading) return <div></div>;
@@ -40,13 +35,12 @@ function App() {
         <div className="min-h-screen bg-slate-900 text-slate-100 font-sans">
           <Navbar />
           <Routes>
-            {/* 🔓 PUBLIC ROUTES */}
+            
             <Route path="/" element={<RootRoute />} />
             <Route path="/landing" element={<Landing />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
 
-            {/* 🔒 PROTECTED ROUTES (Features) */}
             <Route 
               path="/items/:id" 
               element={
@@ -73,8 +67,7 @@ function App() {
                 </ProtectedRoute>
               } 
             />
-            
-            {/* 💬 Chat System */}
+
             <Route 
               path="/chat/:email" 
               element={
@@ -93,7 +86,6 @@ function App() {
               } 
             />
 
-            {/* 👮 Admin Route */}
             <Route 
               path="/admin/logs" 
               element={
@@ -103,7 +95,6 @@ function App() {
               } 
             />
 
-            {/* Catch-all: Redirect unknown URLs to Root */}
             <Route path="*" element={<Navigate to="/" />} />
 
           </Routes>

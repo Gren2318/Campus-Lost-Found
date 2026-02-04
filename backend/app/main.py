@@ -23,24 +23,17 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(lifespan=lifespan)
 
-# 👇 THE FIX: Calculate the exact path to 'backend/static'
-# 1. Get the path of this specific file (main.py)
+
 current_file_path = os.path.abspath(__file__)
-# 2. Get the folder it is in (backend/app)
 app_folder = os.path.dirname(current_file_path)
-# 3. Go up one level to the root (backend)
 backend_root = os.path.dirname(app_folder)
-# 4. Point to the static folder
 static_folder = os.path.join(backend_root, "static")
 
-# Print it so we can see it in the terminal (Debug)
 print(f"📂 Mounting Static Files from: {static_folder}")
 
-# 5. Mount it (only if it exists, to be safe)
 os.makedirs(static_folder, exist_ok=True)
 app.mount("/static", StaticFiles(directory=static_folder), name="static")
 
-# CORS Setup
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://localhost:5173"],
@@ -49,7 +42,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Register Routers
 app.include_router(auth_routes.router, prefix="/api/auth", tags=["Auth"])
 app.include_router(ai.router)
 app.include_router(items.router, prefix="/items", tags=["Items"])

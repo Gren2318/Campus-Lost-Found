@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import api from '../services/api';
-import { ShieldAlert, Clock, ArrowRight, MessageSquare } from 'lucide-react'; // 👈 Added icons
+import { ShieldAlert, Clock, ArrowRight, MessageSquare } from 'lucide-react';
 
 const AdminChatLog = () => {
   const [logs, setLogs] = useState([]);
@@ -22,9 +22,8 @@ const AdminChatLog = () => {
   }, []);
 
   return (
-    <div className="max-w-6xl mx-auto p-4 md:p-6"> {/* 👈 Adjusted padding for mobile */}
+    <div className="max-w-6xl mx-auto p-4 md:p-6">
       
-      {/* Header */}
       <div className="flex flex-col md:flex-row items-start md:items-center gap-4 mb-8">
         <div className="bg-red-600 p-3 rounded-full text-white shadow-lg shadow-red-900/20">
           <ShieldAlert size={32} />
@@ -39,7 +38,6 @@ const AdminChatLog = () => {
         <div className="text-white text-center py-10 animate-pulse">Loading logs...</div>
       ) : (
         <>
-          {/* 🖥️ DESKTOP VIEW: Standard Table (Hidden on Mobile) */}
           <div className="hidden md:block bg-slate-800 rounded-xl border border-slate-700 overflow-hidden shadow-xl">
             <table className="w-full text-left">
               <thead className="bg-slate-900 text-slate-400 text-sm uppercase">
@@ -72,18 +70,16 @@ const AdminChatLog = () => {
             </table>
           </div>
 
-          {/* 📱 MOBILE VIEW: Stacked Cards (Hidden on Desktop) */}
+          
           <div className="md:hidden space-y-4">
             {logs.map((log) => (
               <div key={log.id} className="bg-slate-800 p-4 rounded-xl border border-slate-700 shadow-lg">
                 
-                {/* Top Row: Time */}
                 <div className="flex items-center gap-2 text-xs text-slate-500 mb-3 border-b border-slate-700 pb-2">
                   <Clock size={12} />
                   {new Date(log.timestamp).toLocaleString()}
                 </div>
 
-                {/* Middle Row: Sender -> Receiver */}
                 <div className="flex items-center justify-between mb-3 text-sm">
                    <div className="flex flex-col">
                       <span className="text-xs text-slate-500 mb-1">From</span>
@@ -98,7 +94,6 @@ const AdminChatLog = () => {
                    </div>
                 </div>
 
-                {/* Bottom Row: Message */}
                 <div className="bg-slate-900/50 p-3 rounded-lg border border-slate-700/50 relative">
                   <MessageSquare size={12} className="absolute top-3 left-2 text-slate-600" />
                   <p className="pl-5 text-sm text-slate-300 font-mono break-words">

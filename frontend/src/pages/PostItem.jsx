@@ -4,7 +4,6 @@ import api from '../services/api';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/useAuth';
 
-// 👇 1. Added Helper Function (Outside Component)
 const toTitleCase = (str) => {
   return str.replace(
     /\w\S*/g,
@@ -16,7 +15,6 @@ const PostItem = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
   
-  // State for the form
   const [image, setImage] = useState(null);
   const [preview, setPreview] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -30,7 +28,6 @@ const PostItem = () => {
     date_lost: new Date().toISOString().split('T')[0]
   });
 
-  // 🧠 2. Updated AI Analysis Function (Improved Cleanup Logic)
   const handleAnalyze = async (selectedFile) => {
     setAnalyzing(true);
     try {
@@ -45,13 +42,10 @@ const PostItem = () => {
         let rawDescription = response.data.description;
         let cleanTitle = rawDescription;
 
-        // Remove "Found: " or "Lost: " prefix if AI added it
         cleanTitle = cleanTitle.replace(/^(found|lost):\s*/i, "");
         
-        // Take first 4 words for title
         cleanTitle = cleanTitle.split(' ').slice(0, 4).join(' ');
 
-        // Apply Title Case
         cleanTitle = toTitleCase(cleanTitle);
 
         setFormData(prev => ({
@@ -70,7 +64,6 @@ const PostItem = () => {
     }
   };
 
-  // Handle Image Selection
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -80,7 +73,6 @@ const PostItem = () => {
     }
   };
 
-  // 💾 REAL SUBMIT FUNCTION
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -126,7 +118,6 @@ const PostItem = () => {
 
       <div className="bg-slate-800 rounded-2xl p-8 border border-slate-700 shadow-xl">
         
-        {/* Image Upload Area */}
         <div className="mb-8 relative border-2 border-dashed border-slate-600 rounded-xl p-4 text-center hover:bg-slate-700/50 transition-colors group">
           <input 
             type="file" 

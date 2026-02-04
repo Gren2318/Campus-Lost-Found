@@ -12,13 +12,10 @@ const ChatPage = () => {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
   const [loading, setLoading] = useState(true);
-  
-  // 👇 NEW: This little number controls when we refresh!
   const [refreshKey, setRefreshKey] = useState(0); 
   
   const scrollRef = useRef(null);
 
-  // 1. The Single Source of Truth for Fetching
   useEffect(() => {
     const fetchChat = async () => {
       try {
@@ -30,22 +27,18 @@ const ChatPage = () => {
       }
     };
 
-    fetchChat(); // Call immediately on mount/refresh
+    fetchChat(); 
     
-    // Set up polling (every 3 seconds)
     const interval = setInterval(fetchChat, 3000);
     
-    // Cleanup on unmount
     return () => clearInterval(interval);
 
-  }, [email, refreshKey]); // 👈 Re-run if Email OR refreshKey changes
+  }, [email, refreshKey]); 
 
-  // 2. Auto-scroll to bottom when messages change
   useEffect(() => {
     scrollRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  // 3. Send Message
   const handleSend = async (e) => {
     e.preventDefault();
     if (!newMessage.trim()) return;
@@ -57,7 +50,6 @@ const ChatPage = () => {
       });
       setNewMessage('');
       
-      // 👇 TRICK: Change this number to force the useEffect to run again immediately!
       setRefreshKey(prev => prev + 1); 
       
     } catch (err) {
@@ -69,7 +61,6 @@ const ChatPage = () => {
   return (
     <div className="max-w-4xl mx-auto p-4 h-[calc(100vh-80px)] flex flex-col">
       
-      {/* Header */}
       <div className="bg-slate-800 p-4 rounded-t-2xl flex items-center gap-4 border-b border-slate-700">
         <button onClick={() => navigate(-1)} className="text-slate-400 hover:text-white">
           <ArrowLeft />
@@ -86,7 +77,6 @@ const ChatPage = () => {
         </div>
       </div>
 
-      {/* Chat Area */}
       <div className="flex-1 bg-slate-900 overflow-y-auto p-4 space-y-4 border-x border-slate-700 custom-scrollbar">
         {loading ? (
           <div className="text-center text-slate-500 mt-10">Loading encrypted chat...</div>
@@ -117,7 +107,6 @@ const ChatPage = () => {
         <div ref={scrollRef} />
       </div>
 
-      {/* Input Area */}
       <form onSubmit={handleSend} className="bg-slate-800 p-4 rounded-b-2xl border-t border-slate-700 flex gap-2">
         <input 
           type="text" 

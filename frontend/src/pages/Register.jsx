@@ -4,7 +4,6 @@ import { useNavigate, Link } from 'react-router-dom';
 import { UserPlus, Mail, Lock, Loader, AlertCircle, User } from 'lucide-react';
 
 const Register = () => {
-  // 1. Add Username State
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -26,22 +25,17 @@ const Register = () => {
     setLoading(true);
 
     try {
-      // 2. Send 'username' along with email and password
       await register({ username, email, password });
       alert("Registration Successful! Please Login.");
       navigate('/login');
     } catch (err) {
       console.error(err);
       
-      // 3. SAFE ERROR HANDLING (Prevents the crash)
-      // If the backend sends an object, we convert it to a string or pick the first message
       if (err.response && err.response.data && err.response.data.detail) {
         const detail = err.response.data.detail;
         if (Array.isArray(detail)) {
-            // Pydantic validation error is an array
             setError(detail[0].msg); 
         } else {
-            // Standard error string
             setError(detail); 
         }
       } else {
@@ -70,7 +64,6 @@ const Register = () => {
 
         <form onSubmit={handleSubmit} className="space-y-4">
           
-          {/* New Username Field */}
           <div>
             <label className="block text-slate-400 text-sm font-medium mb-1">Username</label>
             <div className="relative">

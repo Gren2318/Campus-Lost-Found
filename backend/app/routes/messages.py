@@ -7,7 +7,6 @@ from bson import ObjectId
 
 router = APIRouter()
 
-# 1. Send a Message
 @router.post("/", response_model=MessageResponse)
 async def send_message(message: MessageCreate, current_user: dict = Depends(get_current_user)):
     
@@ -29,7 +28,6 @@ async def send_message(message: MessageCreate, current_user: dict = Depends(get_
 async def get_active_conversations(current_user: dict = Depends(get_current_user)):
     user_email = current_user["email"]
     
-    # Find all messages where I am sender OR receiver
     messages = await db.client.campus_connect_db.messages.find({
         "$or": [
             {"sender_id": user_email},
@@ -37,7 +35,6 @@ async def get_active_conversations(current_user: dict = Depends(get_current_user
         ]
     }).to_list(1000)
 
-    # Extract unique people I've talked to
     conversation_partners = set()
     for msg in messages:
         if msg["sender_id"] == user_email:
@@ -47,11 +44,9 @@ async def get_active_conversations(current_user: dict = Depends(get_current_user
 
     return list(conversation_partners)
 
-# 2. Get Chat History (Between Me and User X)
 @router.get("/{other_user_email}", response_model=list[MessageResponse])
 async def get_chat_history(other_user_email: str, current_user: dict = Depends(get_current_user)):
     
-    # Logic: Find messages where (Sender=Me AND Receiver=Them) OR (Sender=Them AND Receiver=Me)
     query = {
         "$or": [
             {"sender_id": current_user["email"], "receiver_id": other_user_email},
@@ -59,20 +54,16 @@ async def get_chat_history(other_user_email: str, current_user: dict = Depends(g
         ]
     }
 
-    # Sort by time (oldest first)
     messages = await db.client.campus_connect_db.messages.find(query).sort("timestamp", 1).to_list(1000)
 
-    # Convert ObjectIds
     for msg in messages:
         msg["id"] = str(msg["_id"])
     
     return messages
 
-# 3. ADMIN: Get All Messages (For Security/Monitoring)
 @router.get("/admin/all", response_model=list[MessageResponse])
 async def get_all_messages_admin(current_user: dict = Depends(get_current_user)):
     
-    # Security Check
     if current_user.get("role") != "admin":
         raise HTTPException(status_code=403, detail="Admin access required")
 

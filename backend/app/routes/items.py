@@ -21,13 +21,13 @@ async def create_item(
     owner_id: str = Form(...),
     file: UploadFile = File(None) 
 ):
-    # 1. Handle Image
+
     image_url = None
     if file:
         file.filename = f"{uuid.uuid4()}.jpg"
         contents = await file.read()
         
-        # Ensure directory exists
+
         os.makedirs(IMAGEDIR, exist_ok=True)
         
         with open(f"{IMAGEDIR}{file.filename}", "wb") as f:
@@ -35,7 +35,6 @@ async def create_item(
         
         image_url = f"/static/images/{file.filename}"
 
-    # 2. Prepare Data
     new_item = {
         "title": title,
         "description": description,
@@ -47,10 +46,8 @@ async def create_item(
         "owner_id": owner_id
     }
 
-    # 3. Save to 'campus_connect_db'
     result = await db.client.campus_connect_db.items.insert_one(new_item)
 
-    # Attach the ID and return immediately
     new_item["_id"] = str(result.inserted_id)
 
     return new_item
@@ -60,7 +57,6 @@ async def create_item(
 async def get_items():
     items = await db.client.campus_connect_db.items.find().to_list(100)
     
-    # Convert ObjectIds to strings
     for item in items:
         item["_id"] = str(item["_id"])
         
@@ -81,42 +77,34 @@ async def get_my_items(current_user: dict = Depends(get_current_user)):
 
 @router.get("/{item_id}", response_model=ItemResponse)
 async def get_item(item_id: str):
-    # 1. Validate ID format
+
     if not ObjectId.is_valid(item_id):
         raise HTTPException(status_code=400, detail="Invalid Item ID")
-    
-    # 2. Find in DB
+
     item = await db.client.campus_connect_db.items.find_one({"_id": ObjectId(item_id)})
     
-    # 3. Handle Not Found
     if not item:
         raise HTTPException(status_code=404, detail="Item not found")
-        
-    # 4. Convert ID and Return
+
     item["_id"] = str(item["_id"])
     return item
 
 
 @router.delete("/{item_id}")
 async def delete_item(item_id: str, current_user: dict = Depends(get_current_user)):
-    # 1. Validate ID
     if not ObjectId.is_valid(item_id):
         raise HTTPException(status_code=400, detail="Invalid Item ID")
     
-    # 2. Find the item
     item = await db.client.campus_connect_db.items.find_one({"_id": ObjectId(item_id)})
     if not item:
         raise HTTPException(status_code=404, detail="Item not found")
         
-    # 3. SECURITY CHECK:
-    # Allow if Owner OR Admin
     is_owner = item["owner_id"] == current_user["email"]
     is_admin = current_user.get("role") == "admin"  # 👈 Check Role
 
     if not is_owner and not is_admin:
         raise HTTPException(status_code=403, detail="Not authorized to delete this item")
     
-    # 4. Delete it
     await db.client.campus_connect_db.items.delete_one({"_id": ObjectId(item_id)})
     
     return {"message": "Item deleted successfully"}

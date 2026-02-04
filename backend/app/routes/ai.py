@@ -7,7 +7,6 @@ load_dotenv()
 
 router = APIRouter()
 
-# Get the Colab URL from .env
 COLAB_URL = os.getenv("COLAB_AI_URL")
 
 @router.post("/analyze")
@@ -15,10 +14,8 @@ async def analyze_image(file: UploadFile = File(...)):
     if not COLAB_URL:
         raise HTTPException(status_code=500, detail="Server Error: COLAB_AI_URL is missing in .env")
 
-    # Read image
     image_data = await file.read()
 
-    # Send to Colab
     async with httpx.AsyncClient() as client:
         try:
             print(f"📡 Sending to AI: {COLAB_URL}")

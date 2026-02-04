@@ -2,12 +2,12 @@ import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import api from '../services/api';
 import { MapPin, Calendar, ArrowLeft, Mail, User, MessageCircle } from 'lucide-react';
-import { useAuth } from '../context/useAuth'; // 👈 Added
+import { useAuth } from '../context/useAuth'; 
 
 const ItemDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { user } = useAuth(); // 👈 Added
+  const { user } = useAuth(); 
 
   const [item, setItem] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -32,7 +32,6 @@ const ItemDetail = () => {
   return (
     <div className="max-w-5xl mx-auto p-4 md:p-6">
       
-      {/* Back Button */}
       <button 
         onClick={() => navigate('/')}
         className="text-slate-400 hover:text-white flex items-center gap-2 mb-6 transition-colors"
@@ -40,10 +39,8 @@ const ItemDetail = () => {
         <ArrowLeft size={20} /> Back to Feed
       </button>
 
-      {/* Card Container */}
       <div className="bg-slate-800 rounded-2xl overflow-hidden border border-slate-700 shadow-2xl flex flex-col md:flex-row">
         
-        {/* Image Section */}
         <div className="w-full md:w-1/2 bg-black/40 flex items-center justify-center p-4">
           <img 
             src={`http://localhost:8000${item.image_url}`} 
@@ -52,10 +49,8 @@ const ItemDetail = () => {
           />
         </div>
 
-        {/* Details Section */}
         <div className="w-full md:w-1/2 p-6 md:p-8 flex flex-col">
           
-          {/* Category + Date */}
           <div className="flex justify-between items-start mb-4">
             <span className={`px-3 py-1 rounded-full text-sm font-bold ${
               item.category === 'Lost'
@@ -69,23 +64,19 @@ const ItemDetail = () => {
             </span>
           </div>
 
-          {/* Title */}
           <h1 className="text-2xl md:text-4xl font-bold text-white mb-4">
             {item.title}
           </h1>
 
-          {/* Description */}
           <p className="text-slate-300 mb-8 leading-relaxed">
             {item.description}
           </p>
 
-          {/* Location */}
           <div className="flex items-center gap-2 text-slate-400 mb-8 p-3 bg-slate-900/50 rounded-lg">
             <MapPin size={20} className="text-blue-500" />
             <span>{item.location}</span>
           </div>
 
-          {/* 👇 Updated Bottom Action Section */}
           <div className="mt-auto pt-6 border-t border-slate-700">
             <h3 className="text-slate-400 text-sm font-medium mb-3 flex items-center gap-2">
               <User size={16} /> Posted by
@@ -94,7 +85,6 @@ const ItemDetail = () => {
             <div className="flex items-center justify-between">
               <span className="text-white font-medium">{item.owner_id}</span>
               
-              {/* 👇 Hide button if current user is owner */}
               {user?.email !== item.owner_id && (
                 <button 
                   onClick={() => navigate(`/chat/${item.owner_id}`)}

@@ -6,26 +6,23 @@ import api from '../services/api';
 const ItemCard = ({ item, onDelete }) => {
   const { user } = useAuth();
   
-  // Check if current user is Admin
   const isAdmin = user?.role === 'admin';
 
-  // Construct image URL (fallback included)
   const imageUrl = item.image_url 
     ? `http://localhost:8000${item.image_url}` 
     : 'https://via.placeholder.com/400x300?text=No+Image';
 
   const handleDeleteClick = async (e) => {
-    e.preventDefault(); // Stop navigation
+    e.preventDefault(); 
 
     if (window.confirm("Admin Action: Delete this post?")) {
       try {
         await api.delete(`/items/${item._id}`);
 
-        // 👇 Use onDelete if parent provided it
         if (onDelete) {
           onDelete(item._id);
         } else {
-          window.location.reload(); // fallback
+          window.location.reload(); 
         }
 
       } catch (err) {
@@ -43,7 +40,6 @@ const ItemCard = ({ item, onDelete }) => {
         className="block bg-slate-800 rounded-xl overflow-hidden border border-slate-700 shadow-lg hover:shadow-2xl transition-all hover:-translate-y-1 h-full flex flex-col"
       >
         
-        {/* Image Section */}
         <div className="h-48 overflow-hidden bg-slate-900 relative">
           <img 
             src={imageUrl}
@@ -51,7 +47,6 @@ const ItemCard = ({ item, onDelete }) => {
             className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
           />
           
-          {/* Category Badge */}
           <div className="absolute top-3 right-3">
             <span className={`px-3 py-1 rounded-full text-xs font-bold shadow-md ${
               item.category === 'Lost' 
@@ -63,7 +58,6 @@ const ItemCard = ({ item, onDelete }) => {
           </div>
         </div>
 
-        {/* Content Section */}
         <div className="p-5 flex flex-col flex-grow">
           <h3 className="text-xl font-bold text-white mb-2 line-clamp-1">
             {item.title}
@@ -82,7 +76,6 @@ const ItemCard = ({ item, onDelete }) => {
 
       </Link>
 
-      {/* ADMIN DELETE BUTTON */}
       {isAdmin && (
         <button
           onClick={handleDeleteClick}
