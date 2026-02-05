@@ -3,17 +3,18 @@ import { useParams, useNavigate } from 'react-router-dom';
 import api from '../services/api';
 import { useAuth } from '../context/useAuth';
 import { Send, ArrowLeft, User, ShieldAlert } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 const ChatPage = () => {
   const { email } = useParams();
   const { user } = useAuth();
   const navigate = useNavigate();
-  
+
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
   const [loading, setLoading] = useState(true);
-  const [refreshKey, setRefreshKey] = useState(0); 
-  
+  const [refreshKey, setRefreshKey] = useState(0);
+
   const scrollRef = useRef(null);
 
   useEffect(() => {
@@ -27,13 +28,13 @@ const ChatPage = () => {
       }
     };
 
-    fetchChat(); 
-    
+    fetchChat();
+
     const interval = setInterval(fetchChat, 3000);
-    
+
     return () => clearInterval(interval);
 
-  }, [email, refreshKey]); 
+  }, [email, refreshKey]);
 
   useEffect(() => {
     scrollRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -49,9 +50,9 @@ const ChatPage = () => {
         content: newMessage
       });
       setNewMessage('');
-      
-      setRefreshKey(prev => prev + 1); 
-      
+
+      setRefreshKey(prev => prev + 1);
+
     } catch (err) {
       alert("Failed to send message");
       console.log(err);
@@ -59,70 +60,83 @@ const ChatPage = () => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-4 h-[calc(100vh-80px)] flex flex-col">
-      
-      <div className="bg-slate-800 p-4 rounded-t-2xl flex items-center gap-4 border-b border-slate-700">
-        <button onClick={() => navigate(-1)} className="text-slate-400 hover:text-white">
-          <ArrowLeft />
+    <div className="max-w-4xl mx-auto p-4 md:p-6 h-screen pt-20 flex flex-col">
+
+      <motion.div
+        initial={{ y: -20, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        className="bg-white p-4 rounded-t-3xl flex items-center gap-4 border-b border-gray-100 shadow-sm z-10"
+      >
+        <button onClick={() => navigate(-1)} className="text-gray-400 hover:text-primary-600 transition-colors p-2 hover:bg-gray-50 rounded-full">
+          <ArrowLeft size={20} />
         </button>
-        <div className="bg-purple-600 p-2 rounded-full text-white">
+        <div className="bg-gradient-to-br from-primary-500 to-primary-600 p-2.5 rounded-full text-white shadow-lg shadow-primary-500/20">
           <User size={20} />
         </div>
         <div>
-          <h2 className="text-white font-bold text-lg">Chat with {email.split('@')[0]}</h2>
-          <p className="text-slate-400 text-xs flex items-center gap-1">
-            <ShieldAlert size={12} className="text-yellow-500" /> 
-            Keep sensitive info safe. Admin monitors chats.
+          <h2 className="text-gray-900 font-bold text-lg leading-tight">{email.split('@')[0]}</h2>
+          <p className="text-amber-500 text-xs flex items-center gap-1 font-medium bg-amber-50 px-2 py-0.5 rounded-full w-fit mt-0.5">
+            <ShieldAlert size={10} />
+            Admin Monitors Chats
           </p>
         </div>
-      </div>
+      </motion.div>
 
-      <div className="flex-1 bg-slate-900 overflow-y-auto p-4 space-y-4 border-x border-slate-700 custom-scrollbar">
+      <div className="flex-1 bg-gray-50 overflow-y-auto p-6 space-y-6 custom-scrollbar shadow-inner">
         {loading ? (
-          <div className="text-center text-slate-500 mt-10">Loading encrypted chat...</div>
+          <div className="text-center text-gray-400 mt-10">Loading encrypted chat...</div>
         ) : messages.length === 0 ? (
-          <div className="text-center text-slate-500 mt-10">
-            <p>No messages yet.</p>
+          <div className="text-center text-gray-400 mt-10">
+            <p className="font-medium text-lg text-gray-500 mb-1">No messages yet.</p>
             <p className="text-sm">Say "Hi" to start the conversation!</p>
           </div>
         ) : (
           messages.map((msg) => {
             const isMe = msg.sender_id === user.email;
             return (
-              <div key={msg.id} className={`flex ${isMe ? 'justify-end' : 'justify-start'}`}>
-                <div className={`max-w-[70%] p-3 rounded-2xl ${
-                  isMe 
-                    ? 'bg-blue-600 text-white rounded-br-none' 
-                    : 'bg-slate-700 text-slate-200 rounded-bl-none'
-                }`}>
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                key={msg.id}
+                className={`flex ${isMe ? 'justify-end' : 'justify-start'}`}
+              >
+                <div className={`max-w-[75%] px-5 py-3.5 rounded-3xl shadow-sm text-[15px] leading-relaxed ${isMe
+                    ? 'bg-primary-600 text-white rounded-br-none shadow-primary-500/20'
+                    : 'bg-white text-gray-700 rounded-bl-none border border-gray-100'
+                  }`}>
                   <p>{msg.content}</p>
-                  <p className={`text-[10px] mt-1 text-right ${isMe ? 'text-blue-200' : 'text-slate-400'}`}>
-                    {new Date(msg.timestamp).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
+                  <p className={`text-[10px] mt-1.5 text-right font-medium opacity-80 ${isMe ? 'text-primary-100' : 'text-gray-400'}`}>
+                    {new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                   </p>
                 </div>
-              </div>
+              </motion.div>
             );
           })
         )}
         <div ref={scrollRef} />
       </div>
 
-      <form onSubmit={handleSend} className="bg-slate-800 p-4 rounded-b-2xl border-t border-slate-700 flex gap-2">
-        <input 
-          type="text" 
+      <motion.form
+        initial={{ y: 20, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        onSubmit={handleSend}
+        className="bg-white p-4 rounded-b-3xl border-t border-gray-100 flex gap-3 shadow-hard z-10"
+      >
+        <input
+          type="text"
           value={newMessage}
           onChange={(e) => setNewMessage(e.target.value)}
           placeholder="Type a message..."
-          className="flex-1 bg-slate-900 border border-slate-700 text-white px-4 py-3 rounded-xl focus:border-blue-500 outline-none"
+          className="flex-1 bg-gray-50 border border-gray-200 text-gray-900 px-5 py-3.5 rounded-2xl focus:bg-white focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 outline-none transition-all font-medium placeholder:text-gray-400"
         />
-        <button 
-          type="submit" 
+        <button
+          type="submit"
           disabled={!newMessage.trim()}
-          className="bg-blue-600 hover:bg-blue-700 text-white p-3 rounded-xl transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          className="bg-primary-600 hover:bg-primary-700 text-white p-3.5 rounded-2xl transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-primary-500/30 hover:shadow-primary-600/40 hover:-translate-y-0.5 active:translate-y-0"
         >
-          <Send size={20} />
+          <Send size={22} />
         </button>
-      </form>
+      </motion.form>
     </div>
   );
 };

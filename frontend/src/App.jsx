@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Navbar from './components/Navbar';
-import { AuthProvider } from './context/AuthContext'; 
-import { useAuth } from './context/useAuth'; 
+import { AuthProvider } from './context/AuthContext';
+import { useAuth } from './context/useAuth';
 
 import Login from './pages/Login';
 import Register from './pages/Register';
@@ -12,13 +12,13 @@ import ItemDetail from './pages/ItemDetail';
 import Profile from './pages/Profile';
 import ChatPage from './pages/ChatPage';
 import Inbox from './pages/Inbox';
-import AdminChatLog from './pages/AdminChatLog'; 
+import AdminChatLog from './pages/AdminChatLog';
 
 const ProtectedRoute = ({ children }) => {
   const { user, loading } = useAuth();
-  
+
   if (loading) return <div className="text-white text-center p-20">Loading...</div>;
-  
+
   return user ? children : <Navigate to="/landing" replace />;
 };
 
@@ -32,67 +32,67 @@ function App() {
   return (
     <AuthProvider>
       <Router>
-        <div className="min-h-screen bg-slate-900 text-slate-100 font-sans">
+        <div className="min-h-screen bg-gray-50 text-gray-900 font-sans">
           <Navbar />
           <Routes>
-            
+
             <Route path="/" element={<RootRoute />} />
             <Route path="/landing" element={<Landing />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
 
-            <Route 
-              path="/items/:id" 
+            <Route
+              path="/items/:id"
               element={
                 <ProtectedRoute>
                   <ItemDetail />
                 </ProtectedRoute>
-              } 
+              }
             />
-            
-            <Route 
-              path="/post" 
+
+            <Route
+              path="/post"
               element={
                 <ProtectedRoute>
                   <PostItem />
                 </ProtectedRoute>
-              } 
+              }
             />
-            
-            <Route 
-              path="/profile" 
+
+            <Route
+              path="/profile"
               element={
                 <ProtectedRoute>
                   <Profile />
                 </ProtectedRoute>
-              } 
+              }
             />
 
-            <Route 
-              path="/chat/:email" 
+            <Route
+              path="/chat/:email"
               element={
                 <ProtectedRoute>
                   <ChatPage />
                 </ProtectedRoute>
-              } 
+              }
             />
-            
-            <Route 
-              path="/inbox" 
+
+            <Route
+              path="/inbox"
               element={
                 <ProtectedRoute>
                   <Inbox />
                 </ProtectedRoute>
-              } 
+              }
             />
 
-            <Route 
-              path="/admin/logs" 
+            <Route
+              path="/admin/logs"
               element={
                 <ProtectedRoute>
                   <AdminChatLog />
                 </ProtectedRoute>
-              } 
+              }
             />
 
             <Route path="*" element={<Navigate to="/" />} />

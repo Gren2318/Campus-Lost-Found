@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import api from '../services/api';
 import { Link } from 'react-router-dom';
-import { MessageCircle, User } from 'lucide-react';
+import { MessageCircle, User, ArrowRight } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 const Inbox = () => {
   const [conversations, setConversations] = useState([]);
@@ -22,44 +23,55 @@ const Inbox = () => {
   }, []);
 
   return (
-    <div className="max-w-2xl mx-auto p-6">
-      <h1 className="text-3xl font-bold text-white mb-8 flex items-center gap-3">
-        <MessageCircle className="text-blue-500" /> My Messages
-      </h1>
-
-      <div className="bg-slate-800 rounded-2xl border border-slate-700 overflow-hidden shadow-xl">
-        {loading ? (
-          <div className="p-8 text-center text-slate-400">Loading chats...</div>
-        ) : conversations.length === 0 ? (
-          <div className="p-10 text-center text-slate-500">
-            <p className="mb-2">No messages yet.</p>
-            <p className="text-sm">When someone contacts you about an item, they will appear here.</p>
+    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pt-24 min-h-screen">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+      >
+        <div className="flex items-center gap-3 mb-8">
+          <div className="bg-primary-50 p-2.5 rounded-xl text-primary-600">
+            <MessageCircle size={28} />
           </div>
-        ) : (
-          <div className="divide-y divide-slate-700">
-            {conversations.map((email) => (
-              <Link 
-                key={email}
-                to={`/chat/${email}`}
-                className="flex items-center gap-4 p-5 hover:bg-slate-700/50 transition-colors"
-              >
-                <div className="bg-purple-600 w-12 h-12 rounded-full flex items-center justify-center text-white font-bold text-lg shadow-lg">
-                  {email.charAt(0).toUpperCase()}
-                </div>
-                
-                <div className="flex-1">
-                  <h3 className="text-white font-bold text-lg">{email.split('@')[0]}</h3>
-                  <p className="text-slate-400 text-sm">Click to view conversation</p>
-                </div>
+          <h1 className="text-3xl font-heading font-bold text-gray-900">My Messages</h1>
+        </div>
 
-                <div className="text-blue-400">
-                  <MessageCircle size={20} />
-                </div>
-              </Link>
-            ))}
-          </div>
-        )}
-      </div>
+        <div className="bg-white rounded-3xl border border-gray-100 overflow-hidden shadow-hard">
+          {loading ? (
+            <div className="p-12 text-center text-gray-400">Loading chats...</div>
+          ) : conversations.length === 0 ? (
+            <div className="p-16 text-center text-gray-400 flex flex-col items-center">
+              <div className="bg-gray-50 p-4 rounded-full mb-4">
+                <MessageCircle size={32} className="text-gray-300" />
+              </div>
+              <p className="mb-1 text-lg font-medium text-gray-600">No messages yet</p>
+              <p className="text-sm">When someone contacts you about an item, they will appear here.</p>
+            </div>
+          ) : (
+            <div className="divide-y divide-gray-50">
+              {conversations.map((email) => (
+                <Link
+                  key={email}
+                  to={`/chat/${email}`}
+                  className="flex items-center gap-4 p-6 hover:bg-gray-50 transition-colors group"
+                >
+                  <div className="bg-gradient-to-br from-primary-500 to-primary-600 w-12 h-12 rounded-full flex items-center justify-center text-white font-bold text-lg shadow-lg shadow-primary-500/20 group-hover:scale-110 transition-transform">
+                    {email.charAt(0).toUpperCase()}
+                  </div>
+
+                  <div className="flex-1">
+                    <h3 className="text-gray-900 font-bold text-lg group-hover:text-primary-600 transition-colors">{email.split('@')[0]}</h3>
+                    <p className="text-gray-400 text-sm font-medium">Click to view conversation</p>
+                  </div>
+
+                  <div className="text-gray-300 group-hover:text-primary-500 group-hover:translate-x-1 transition-all">
+                    <ArrowRight size={20} />
+                  </div>
+                </Link>
+              ))}
+            </div>
+          )}
+        </div>
+      </motion.div>
     </div>
   );
 };

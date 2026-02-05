@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import api from '../services/api';
-import { ShieldAlert, Clock, ArrowRight, MessageSquare } from 'lucide-react';
+import { ShieldAlert, Clock, ArrowRight, MessageSquare, Search } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 const AdminChatLog = () => {
   const [logs, setLogs] = useState([]);
@@ -22,46 +23,54 @@ const AdminChatLog = () => {
   }, []);
 
   return (
-    <div className="max-w-6xl mx-auto p-4 md:p-6">
-      
-      <div className="flex flex-col md:flex-row items-start md:items-center gap-4 mb-8">
-        <div className="bg-red-600 p-3 rounded-full text-white shadow-lg shadow-red-900/20">
-          <ShieldAlert size={32} />
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pt-24 min-h-screen">
+
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="flex flex-col md:flex-row items-start md:items-center gap-6 mb-10"
+      >
+        <div className="bg-red-50 p-4 rounded-2xl text-red-600 shadow-lg shadow-red-500/10 border border-red-100">
+          <ShieldAlert size={36} />
         </div>
         <div>
-          <h1 className="text-2xl md:text-3xl font-bold text-white">Security Logs</h1>
-          <p className="text-slate-400 text-sm md:text-base">Monitoring all campus conversations</p>
+          <h1 className="text-3xl font-heading font-bold text-gray-900 mb-1">Security Logs</h1>
+          <p className="text-gray-500 font-medium">Monitoring all campus conversations for safety.</p>
         </div>
-      </div>
+      </motion.div>
 
       {loading ? (
-        <div className="text-white text-center py-10 animate-pulse">Loading logs...</div>
+        <div className="text-center py-20 text-gray-400 font-medium animate-pulse">Loading logs...</div>
       ) : (
-        <>
-          <div className="hidden md:block bg-slate-800 rounded-xl border border-slate-700 overflow-hidden shadow-xl">
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.1 }}
+        >
+          <div className="hidden md:block bg-white rounded-3xl border border-gray-100 overflow-hidden shadow-hard">
             <table className="w-full text-left">
-              <thead className="bg-slate-900 text-slate-400 text-sm uppercase">
+              <thead className="bg-gray-50 text-gray-400 text-xs font-bold uppercase tracking-wider border-b border-gray-100">
                 <tr>
-                  <th className="p-4">Time</th>
-                  <th className="p-4">Sender</th>
-                  <th className="p-4">Receiver</th>
-                  <th className="p-4">Message Content</th>
+                  <th className="p-6">Time</th>
+                  <th className="p-6">Sender</th>
+                  <th className="p-6">Receiver</th>
+                  <th className="p-6">Message Content</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-700 text-slate-300">
+              <tbody className="divide-y divide-gray-50">
                 {logs.map((log) => (
-                  <tr key={log.id} className="hover:bg-slate-700/50 transition-colors">
-                    <td className="p-4 whitespace-nowrap text-sm text-slate-500">
+                  <tr key={log.id} className="hover:bg-primary-50/30 transition-colors">
+                    <td className="p-6 whitespace-nowrap text-sm text-gray-500 font-medium">
                       <div className="flex items-center gap-2">
-                        <Clock size={14} />
+                        <Clock size={16} className="text-gray-300" />
                         {new Date(log.timestamp).toLocaleString()}
                       </div>
                     </td>
-                    <td className="p-4 font-medium text-blue-400">{log.sender_id}</td>
-                    <td className="p-4 text-purple-400">{log.receiver_id}</td>
-                    <td className="p-4">
-                      <div className="bg-slate-900/50 p-2 rounded text-sm font-mono text-slate-200 border border-slate-700/50">
-                         {log.content}
+                    <td className="p-6 font-bold text-primary-600">{log.sender_id}</td>
+                    <td className="p-6 font-bold text-purple-600">{log.receiver_id}</td>
+                    <td className="p-6 w-1/2">
+                      <div className="bg-gray-50 p-3 rounded-xl text-sm text-gray-700 border border-gray-200">
+                        {log.content}
                       </div>
                     </td>
                   </tr>
@@ -70,33 +79,33 @@ const AdminChatLog = () => {
             </table>
           </div>
 
-          
+
           <div className="md:hidden space-y-4">
             {logs.map((log) => (
-              <div key={log.id} className="bg-slate-800 p-4 rounded-xl border border-slate-700 shadow-lg">
-                
-                <div className="flex items-center gap-2 text-xs text-slate-500 mb-3 border-b border-slate-700 pb-2">
-                  <Clock size={12} />
+              <div key={log.id} className="bg-white p-5 rounded-3xl border border-gray-100 shadow-soft">
+
+                <div className="flex items-center gap-2 text-xs font-bold text-gray-400 mb-4 border-b border-gray-50 pb-3">
+                  <Clock size={14} />
                   {new Date(log.timestamp).toLocaleString()}
                 </div>
 
-                <div className="flex items-center justify-between mb-3 text-sm">
-                   <div className="flex flex-col">
-                      <span className="text-xs text-slate-500 mb-1">From</span>
-                      <span className="text-blue-400 font-medium truncate max-w-[120px]">{log.sender_id.split('@')[0]}</span>
-                   </div>
+                <div className="flex items-center justify-between mb-4 text-sm bg-gray-50 p-3 rounded-2xl">
+                  <div className="flex flex-col">
+                    <span className="text-[10px] uppercase font-bold text-gray-400 mb-1">From</span>
+                    <span className="text-primary-600 font-bold truncate max-w-[120px]">{log.sender_id.split('@')[0]}</span>
+                  </div>
 
-                   <ArrowRight size={16} className="text-slate-600" />
+                  <ArrowRight size={18} className="text-gray-300" />
 
-                   <div className="flex flex-col items-end">
-                      <span className="text-xs text-slate-500 mb-1">To</span>
-                      <span className="text-purple-400 font-medium truncate max-w-[120px]">{log.receiver_id.split('@')[0]}</span>
-                   </div>
+                  <div className="flex flex-col items-end">
+                    <span className="text-[10px] uppercase font-bold text-gray-400 mb-1">To</span>
+                    <span className="text-purple-600 font-bold truncate max-w-[120px]">{log.receiver_id.split('@')[0]}</span>
+                  </div>
                 </div>
 
-                <div className="bg-slate-900/50 p-3 rounded-lg border border-slate-700/50 relative">
-                  <MessageSquare size={12} className="absolute top-3 left-2 text-slate-600" />
-                  <p className="pl-5 text-sm text-slate-300 font-mono break-words">
+                <div className="bg-yellow-50/50 p-4 rounded-2xl border border-yellow-100/50 relative">
+                  <MessageSquare size={14} className="absolute top-4 left-3 text-yellow-400" />
+                  <p className="pl-6 text-sm text-gray-700 break-words leading-relaxed font-medium">
                     {log.content}
                   </p>
                 </div>
@@ -104,7 +113,7 @@ const AdminChatLog = () => {
               </div>
             ))}
           </div>
-        </>
+        </motion.div>
       )}
     </div>
   );

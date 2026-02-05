@@ -1,17 +1,18 @@
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/useAuth';
-import { 
-  LogOut, 
-  PlusCircle, 
-  User, 
-  Home, 
-  MessageCircle, 
-  ShieldAlert, 
-  ShieldCheck, 
-  Menu, 
-  X     
+import {
+  LogOut,
+  PlusCircle,
+  User,
+  Home,
+  MessageCircle,
+  ShieldAlert,
+  ShieldCheck,
+  Menu,
+  X
 } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const Navbar = () => {
   const { user, logout } = useAuth();
@@ -22,22 +23,22 @@ const Navbar = () => {
   const closeMenu = () => setIsOpen(false);
 
   return (
-    <nav className="bg-slate-800 border-b border-slate-700 sticky top-0 z-50 shadow-lg">
+    <nav className="fixed top-0 w-full z-50 glass border-b border-gray-200/50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
-          
+
           <div className="flex md:hidden">
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="text-slate-300 hover:text-white p-2 focus:outline-none"
+              className="text-gray-600 hover:text-primary-600 p-2 focus:outline-none transition-colors"
             >
               {isOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
           </div>
 
-          <Link 
-            to="/" 
-            className="text-xl md:text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent hover:opacity-80 transition-opacity flex items-center gap-2"
+          <Link
+            to="/"
+            className="text-2xl font-heading font-bold bg-gradient-to-r from-primary-600 to-primary-400 bg-clip-text text-transparent hover:opacity-80 transition-opacity flex items-center gap-2"
           >
             CampusConnect
           </Link>
@@ -46,53 +47,52 @@ const Navbar = () => {
             {user ? (
               <>
                 {user.role === 'admin' && (
-                  <Link 
-                    to="/admin/logs" 
-                    className={`flex items-center gap-1 px-3 py-1 rounded-full border transition-all ${
-                      isActive('/admin/logs') 
-                        ? 'bg-red-600 text-white border-red-500' 
-                        : 'bg-red-900/20 text-red-400 border-red-900/50 hover:bg-red-900/40'
-                    }`}
+                  <Link
+                    to="/admin/logs"
+                    className={`flex items-center gap-1 px-3 py-1 rounded-full border transition-all duration-300 ${isActive('/admin/logs')
+                        ? 'bg-red-50 text-red-600 border-red-200 shadow-sm'
+                        : 'bg-transparent text-gray-500 border-transparent hover:bg-red-50 hover:text-red-500'
+                      }`}
                   >
-                    <ShieldAlert size={14} />
+                    <ShieldAlert size={16} />
                     <span className="text-xs font-bold uppercase tracking-wide">Logs</span>
                   </Link>
                 )}
 
-                <Link to="/" className={`p-2 rounded-full transition-colors ${isActive('/') ? 'text-white bg-slate-700' : 'text-slate-300 hover:text-white'}`}>
+                <Link to="/" className={`p-2 rounded-full transition-all duration-300 ${isActive('/') ? 'bg-primary-50 text-primary-600 shadow-sm' : 'text-gray-400 hover:text-primary-500 hover:bg-gray-50'}`}>
                   <Home size={22} />
                 </Link>
 
-                <Link to="/inbox" className={`p-2 rounded-full transition-colors relative ${isActive('/inbox') ? 'text-white bg-slate-700' : 'text-slate-300 hover:text-white'}`}>
+                <Link to="/inbox" className={`p-2 rounded-full transition-all duration-300 relative ${isActive('/inbox') ? 'bg-primary-50 text-primary-600 shadow-sm' : 'text-gray-400 hover:text-primary-500 hover:bg-gray-50'}`}>
                   <MessageCircle size={22} />
-                  <span className="absolute top-1.5 right-1.5 w-2.5 h-2.5 bg-red-500 border-2 border-slate-800 rounded-full animate-pulse"></span>
+                  <span className="absolute top-1.5 right-1.5 w-2.5 h-2.5 bg-red-500 border-2 border-white rounded-full animate-pulse"></span>
                 </Link>
 
-                <Link to="/post" className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-full font-medium transition-all shadow-lg shadow-blue-500/20">
+                <Link to="/post" className="flex items-center gap-2 bg-primary-600 hover:bg-primary-700 text-white px-5 py-2 rounded-full font-medium transition-all shadow-lg shadow-primary-500/30 hover:shadow-primary-600/40 hover:-translate-y-0.5 active:translate-y-0">
                   <PlusCircle size={18} />
                   <span>Post Item</span>
                 </Link>
 
-                <Link to="/profile" className={`flex items-center gap-2 transition-colors ${isActive('/profile') ? 'text-white' : 'text-slate-300 hover:text-white'}`}>
-                  <div className="bg-slate-700 p-1.5 rounded-full">
+                <Link to="/profile" className={`flex items-center gap-3 pl-1 pr-3 py-1 rounded-full transition-all border ${isActive('/profile') ? 'border-primary-100 bg-primary-50/50' : 'border-transparent hover:bg-gray-50'}`}>
+                  <div className="bg-gradient-to-br from-primary-100 to-primary-200 p-1.5 rounded-full text-primary-700">
                     <User size={18} />
                   </div>
                   <div className="flex flex-col">
-                    <span className="text-sm font-medium leading-none">{user.username || user.email?.split('@')[0]}</span>
+                    <span className="text-sm font-medium text-gray-700 leading-none">{user.username || user.email?.split('@')[0]}</span>
                     {user.role === 'admin' && (
-                        <span className="flex items-center gap-1 text-[10px] text-yellow-500 font-bold mt-0.5">
-                            <ShieldCheck size={10} /> ADMIN
-                        </span>
+                      <span className="flex items-center gap-1 text-[10px] text-amber-500 font-bold mt-0.5">
+                        <ShieldCheck size={10} /> ADMIN
+                      </span>
                     )}
                   </div>
                 </Link>
 
-                <button onClick={logout} className="p-2 text-slate-400 hover:text-red-400 hover:bg-slate-700/50 rounded-full transition-all">
+                <button onClick={logout} className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-full transition-all">
                   <LogOut size={20} />
                 </button>
               </>
             ) : (
-              <Link to="/login" className="text-slate-300 hover:text-white font-medium px-4 py-2 hover:bg-slate-700 rounded-lg transition-all">
+              <Link to="/login" className="text-gray-600 hover:text-primary-600 font-medium px-5 py-2 hover:bg-primary-50 rounded-full transition-all">
                 Login
               </Link>
             )}
@@ -100,70 +100,77 @@ const Navbar = () => {
         </div>
       </div>
 
-      {isOpen && (
-        <div className="md:hidden bg-slate-900 border-b border-slate-700 animate-fadeIn">
-          <div className="px-4 pt-2 pb-6 space-y-2">
-            
-            {user ? (
-              <>
-                <div className="flex items-center gap-3 p-3 bg-slate-800 rounded-lg mb-4 border border-slate-700">
-                  <div className="bg-purple-600 p-2 rounded-full text-white">
-                    <User size={20} />
-                  </div>
-                  <div>
-                    <p className="text-white font-bold">{user.username || user.email?.split('@')[0]}</p>
-                    <p className="text-xs text-slate-400">{user.email}</p>
-                    {user.role === 'admin' && (
-                       <span className="flex items-center gap-1 text-[10px] text-yellow-500 font-bold mt-1">
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            className="md:hidden bg-white border-b border-gray-100 overflow-hidden"
+          >
+            <div className="px-4 pt-2 pb-6 space-y-2">
+
+              {user ? (
+                <>
+                  <div className="flex items-center gap-3 p-4 bg-gray-50 rounded-xl mb-4 border border-gray-100">
+                    <div className="bg-primary-100 p-2.5 rounded-full text-primary-600">
+                      <User size={20} />
+                    </div>
+                    <div>
+                      <p className="text-gray-900 font-bold">{user.username || user.email?.split('@')[0]}</p>
+                      <p className="text-xs text-gray-500">{user.email}</p>
+                      {user.role === 'admin' && (
+                        <span className="flex items-center gap-1 text-[10px] text-amber-500 font-bold mt-1">
                           <ShieldCheck size={10} /> ADMINISTRATOR
-                       </span>
-                    )}
+                        </span>
+                      )}
+                    </div>
                   </div>
-                </div>
 
-                <Link to="/" onClick={closeMenu} className="flex items-center gap-3 text-slate-300 hover:text-white hover:bg-slate-800 px-3 py-3 rounded-lg transition-colors">
-                  <Home size={20} /> Home Feed
-                </Link>
-
-                <Link to="/inbox" onClick={closeMenu} className="flex items-center gap-3 text-slate-300 hover:text-white hover:bg-slate-800 px-3 py-3 rounded-lg transition-colors justify-between">
-                  <div className="flex items-center gap-3"><MessageCircle size={20} /> Messages</div>
-                  <span className="bg-red-500 text-white text-xs px-2 py-0.5 rounded-full">New</span>
-                </Link>
-
-                <Link to="/post" onClick={closeMenu} className="flex items-center gap-3 text-blue-400 hover:text-blue-300 hover:bg-slate-800 px-3 py-3 rounded-lg transition-colors font-bold">
-                  <PlusCircle size={20} /> Post Lost Item
-                </Link>
-
-                <Link to="/profile" onClick={closeMenu} className="flex items-center gap-3 text-slate-300 hover:text-white hover:bg-slate-800 px-3 py-3 rounded-lg transition-colors">
-                  <User size={20} /> My Profile
-                </Link>
-
-                {user.role === 'admin' && (
-                  <Link to="/admin/logs" onClick={closeMenu} className="flex items-center gap-3 text-red-400 hover:text-red-300 hover:bg-red-900/20 px-3 py-3 rounded-lg transition-colors border border-red-900/30">
-                    <ShieldAlert size={20} /> Security Logs
+                  <Link to="/" onClick={closeMenu} className="flex items-center gap-3 text-gray-600 hover:text-primary-600 hover:bg-primary-50 px-4 py-3 rounded-xl transition-colors font-medium">
+                    <Home size={20} /> Home Feed
                   </Link>
-                )}
 
-                <div className="border-t border-slate-700 my-2"></div>
+                  <Link to="/inbox" onClick={closeMenu} className="flex items-center gap-3 text-gray-600 hover:text-primary-600 hover:bg-primary-50 px-4 py-3 rounded-xl transition-colors justify-between font-medium">
+                    <div className="flex items-center gap-3"><MessageCircle size={20} /> Messages</div>
+                    <span className="bg-red-500 text-white text-xs px-2 py-0.5 rounded-full shadow-sm">New</span>
+                  </Link>
 
-                <button onClick={() => { logout(); closeMenu(); }} className="w-full flex items-center gap-3 text-red-400 hover:text-white hover:bg-red-600 px-3 py-3 rounded-lg transition-colors">
-                  <LogOut size={20} /> Logout
-                </button>
-              </>
-            ) : (
-              <div className="flex flex-col gap-2">
-                <Link to="/login" onClick={closeMenu} className="block w-full text-center bg-slate-700 hover:bg-slate-600 text-white py-3 rounded-lg font-bold">
-                  Login
-                </Link>
-                <Link to="/register" onClick={closeMenu} className="block w-full text-center bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-bold">
-                  Sign Up
-                </Link>
-              </div>
-            )}
+                  <Link to="/post" onClick={closeMenu} className="flex items-center gap-3 text-primary-600 bg-primary-50 hover:bg-primary-100 px-4 py-3 rounded-xl transition-colors font-bold">
+                    <PlusCircle size={20} /> Post Lost Item
+                  </Link>
 
-          </div>
-        </div>
-      )}
+                  <Link to="/profile" onClick={closeMenu} className="flex items-center gap-3 text-gray-600 hover:text-primary-600 hover:bg-primary-50 px-4 py-3 rounded-xl transition-colors font-medium">
+                    <User size={20} /> My Profile
+                  </Link>
+
+                  {user.role === 'admin' && (
+                    <Link to="/admin/logs" onClick={closeMenu} className="flex items-center gap-3 text-red-500 hover:bg-red-50 px-4 py-3 rounded-xl transition-colors border border-red-100 font-medium">
+                      <ShieldAlert size={20} /> Security Logs
+                    </Link>
+                  )}
+
+                  <div className="border-t border-gray-100 my-2"></div>
+
+                  <button onClick={() => { logout(); closeMenu(); }} className="w-full flex items-center gap-3 text-red-500 hover:text-red-600 hover:bg-red-50 px-4 py-3 rounded-xl transition-colors font-medium">
+                    <LogOut size={20} /> Logout
+                  </button>
+                </>
+              ) : (
+                <div className="flex flex-col gap-3 pt-2">
+                  <Link to="/login" onClick={closeMenu} className="block w-full text-center text-gray-600 hover:bg-gray-100 py-3 rounded-xl font-bold transition-colors">
+                    Login
+                  </Link>
+                  <Link to="/register" onClick={closeMenu} className="block w-full text-center bg-primary-600 hover:bg-primary-700 text-white py-3 rounded-xl font-bold shadow-lg shadow-primary-500/20 transition-all">
+                    Sign Up
+                  </Link>
+                </div>
+              )}
+
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </nav>
   );
 };

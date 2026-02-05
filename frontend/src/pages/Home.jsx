@@ -1,13 +1,14 @@
 import { useEffect, useState } from 'react';
 import api from '../services/api';
 import ItemCard from '../components/ItemCard';
-import { Search, Filter } from 'lucide-react';
+import { Search, Filter, RefreshCw } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 const Home = () => {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
-  const [categoryFilter, setCategoryFilter] = useState('All'); 
+  const [categoryFilter, setCategoryFilter] = useState('All');
 
   useEffect(() => {
     const fetchItems = async () => {
@@ -27,46 +28,45 @@ const Home = () => {
 
   const filteredItems = items.filter(item => {
     const matchesCategory = categoryFilter === 'All' || item.category === categoryFilter;
-    
+
     const text = searchTerm.toLowerCase();
-    const matchesSearch = item.title.toLowerCase().includes(text) || 
-                          item.description.toLowerCase().includes(text) ||
-                          item.location.toLowerCase().includes(text);
+    const matchesSearch = item.title.toLowerCase().includes(text) ||
+      item.description.toLowerCase().includes(text) ||
+      item.location.toLowerCase().includes(text);
 
     return matchesCategory && matchesSearch;
   });
 
   return (
-    <div className="max-w-6xl mx-auto p-6">
-      
-      <div className="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pt-24 min-h-screen">
+
+      <div className="flex flex-col md:flex-row justify-between items-end mb-10 gap-6">
         <div>
-          <h1 className="text-3xl font-bold text-white mb-2">Campus Feed</h1>
-          <p className="text-slate-400">Real-time lost and found updates</p>
+          <h1 className="text-4xl font-heading font-bold text-gray-900 mb-2">Campus Feed</h1>
+          <p className="text-gray-500 text-lg">Real-time lost and found updates</p>
         </div>
 
-        <div className="relative w-full md:w-96">
-          <Search className="absolute left-3 top-3 text-slate-500" size={20} />
-          <input 
-            type="text" 
-            placeholder="Search keys, backpack, library..." 
+        <div className="relative w-full md:w-96 group">
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-primary-500 transition-colors" size={20} />
+          <input
+            type="text"
+            placeholder="Search keys, backpack, library..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full bg-slate-800 border border-slate-700 rounded-full py-3 pl-10 pr-4 text-white focus:border-purple-500 outline-none shadow-lg"
+            className="w-full bg-white border border-gray-200 rounded-2xl py-3 pl-12 pr-4 text-gray-900 focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 outline-none shadow-sm transition-all"
           />
         </div>
       </div>
 
-      <div className="flex gap-4 mb-8">
+      <div className="flex gap-3 mb-10 overflow-x-auto pb-2 scrollbar-hide">
         {['All', 'Lost', 'Found'].map((cat) => (
           <button
             key={cat}
             onClick={() => setCategoryFilter(cat)}
-            className={`px-6 py-2 rounded-full font-medium transition-all ${
-              categoryFilter === cat 
-                ? 'bg-purple-600 text-white shadow-lg shadow-purple-900/20' 
-                : 'bg-slate-800 text-slate-400 hover:bg-slate-700'
-            }`}
+            className={`px-6 py-2.5 rounded-xl font-medium transition-all whitespace-nowrap ${categoryFilter === cat
+                ? 'bg-primary-600 text-white shadow-lg shadow-primary-500/25 scale-105'
+                : 'bg-white text-gray-600 border border-gray-200 hover:bg-gray-50 hover:border-gray-300'
+              }`}
           >
             {cat}
           </button>
@@ -74,22 +74,34 @@ const Home = () => {
       </div>
 
       {loading ? (
-        <div className="text-white text-center py-20 animate-pulse">Loading recent items...</div>
+        <div className="flex flex-col items-center justify-center py-32 text-gray-400">
+          <RefreshCw className="animate-spin mb-4 text-primary-500" size={32} />
+          <p>Loading recent items...</p>
+        </div>
       ) : (
         <>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
+          >
             {filteredItems.map(item => (
               <ItemCard key={item._id} item={item} />
             ))}
-          </div>
+          </motion.div>
 
           {filteredItems.length === 0 && (
-            <div className="text-center py-20 bg-slate-800/50 rounded-2xl border border-dashed border-slate-700 mt-4">
-              <Filter className="mx-auto text-slate-500 mb-4" size={48} />
-              <p className="text-slate-400 text-lg">No items match your search.</p>
-              <button 
-                onClick={() => {setSearchTerm(''); setCategoryFilter('All');}}
-                className="text-purple-400 hover:text-purple-300 mt-2 font-medium"
+            <div className="flex flex-col items-center justify-center py-24 bg-white rounded-3xl border border-dashed border-gray-200 shadow-sm mt-4">
+              <div className="bg-gray-50 p-4 rounded-full mb-6">
+                <Filter className="text-gray-400" size={32} />
+              </div>
+              <h3 className="text-xl font-bold text-gray-900 mb-2">No items match your search</h3>
+              <p className="text-gray-500 text-center max-w-md mb-6">
+                Try adjusting your search terms or changing the category filter.
+              </p>
+              <button
+                onClick={() => { setSearchTerm(''); setCategoryFilter('All'); }}
+                className="text-primary-600 hover:text-primary-700 font-bold hover:underline"
               >
                 Clear Filters
               </button>
