@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useAuth } from '../context/useAuth';
 import { useNavigate, Link } from 'react-router-dom';
 import { UserPlus, Mail, Lock, Loader, AlertCircle, User, ArrowLeft } from 'lucide-react';
+import { useToast } from '../context/ToastContext';
 import { motion } from 'framer-motion';
 
 const Register = () => {
@@ -13,6 +14,7 @@ const Register = () => {
   const [loading, setLoading] = useState(false);
 
   const { register } = useAuth();
+  const { showToast } = useToast();
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -27,7 +29,7 @@ const Register = () => {
 
     try {
       await register({ username, email, password });
-      alert("Registration Successful! Please Login.");
+      showToast("Registration Successful! Please Login.", "success");
       navigate('/login');
     } catch (err) {
       console.error(err);

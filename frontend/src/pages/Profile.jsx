@@ -2,11 +2,13 @@ import { useEffect, useState } from 'react';
 import api from '../services/api';
 import ItemCard from '../components/ItemCard';
 import { useAuth } from '../context/useAuth';
+import { useToast } from '../context/ToastContext';
 import { User, LogOut, Trash2 } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const Profile = () => {
   const { user, logout } = useAuth();
+  const { showToast } = useToast();
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -33,7 +35,7 @@ const Profile = () => {
       setItems(items.filter(item => item._id !== itemId));
     } catch (error) {
       console.error("Failed to delete item:", error);
-      alert("Failed to delete item.");
+      showToast("Failed to delete item.", "error");
     }
   };
 

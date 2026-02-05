@@ -28,79 +28,83 @@ const RootRoute = () => {
   return user ? <Home /> : <Landing />;
 };
 
+import { ToastProvider } from './context/ToastContext';
+
 function App() {
   return (
-    <AuthProvider>
-      <Router>
-        <div className="min-h-screen bg-gray-50 text-gray-900 font-sans">
-          <Navbar />
-          <Routes>
+    <ToastProvider>
+      <AuthProvider>
+        <Router>
+          <div className="min-h-screen bg-gray-50 text-gray-900 font-sans">
+            <Navbar />
+            <Routes>
 
-            <Route path="/" element={<RootRoute />} />
-            <Route path="/landing" element={<Landing />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
+              <Route path="/" element={<RootRoute />} />
+              <Route path="/landing" element={<Landing />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
 
-            <Route
-              path="/items/:id"
-              element={
-                <ProtectedRoute>
-                  <ItemDetail />
-                </ProtectedRoute>
-              }
-            />
+              <Route
+                path="/items/:id"
+                element={
+                  <ProtectedRoute>
+                    <ItemDetail />
+                  </ProtectedRoute>
+                }
+              />
 
-            <Route
-              path="/post"
-              element={
-                <ProtectedRoute>
-                  <PostItem />
-                </ProtectedRoute>
-              }
-            />
+              <Route
+                path="/post"
+                element={
+                  <ProtectedRoute>
+                    <PostItem />
+                  </ProtectedRoute>
+                }
+              />
 
-            <Route
-              path="/profile"
-              element={
-                <ProtectedRoute>
-                  <Profile />
-                </ProtectedRoute>
-              }
-            />
+              <Route
+                path="/profile"
+                element={
+                  <ProtectedRoute>
+                    <Profile />
+                  </ProtectedRoute>
+                }
+              />
 
-            <Route
-              path="/chat/:email"
-              element={
-                <ProtectedRoute>
-                  <ChatPage />
-                </ProtectedRoute>
-              }
-            />
+              <Route
+                path="/chat/:email"
+                element={
+                  <ProtectedRoute>
+                    <ChatPage />
+                  </ProtectedRoute>
+                }
+              />
 
-            <Route
-              path="/inbox"
-              element={
-                <ProtectedRoute>
-                  <Inbox />
-                </ProtectedRoute>
-              }
-            />
+              <Route
+                path="/inbox"
+                element={
+                  <ProtectedRoute>
+                    <Inbox />
+                  </ProtectedRoute>
+                }
+              />
 
-            <Route
-              path="/admin/logs"
-              element={
-                <ProtectedRoute>
-                  <AdminChatLog />
-                </ProtectedRoute>
-              }
-            />
+              <Route
+                path="/admin/logs"
+                element={
+                  <ProtectedRoute>
+                    <AdminChatLog />
+                  </ProtectedRoute>
+                }
+              />
 
-            <Route path="*" element={<Navigate to="/" />} />
+              <Route path="*" element={<Navigate to="/" />} />
 
-          </Routes>
-        </div>
-      </Router>
-    </AuthProvider>
+            </Routes>
+          </div>
+        </Router>
+      </AuthProvider>
+    </ToastProvider>
   );
 }
 

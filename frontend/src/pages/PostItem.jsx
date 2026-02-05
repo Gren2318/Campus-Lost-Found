@@ -3,6 +3,7 @@ import { Camera, MapPin, Loader, Sparkles, Upload } from 'lucide-react';
 import api from '../services/api';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/useAuth';
+import { useToast } from '../context/ToastContext';
 import { motion } from 'framer-motion';
 
 const toTitleCase = (str) => {
@@ -15,6 +16,7 @@ const toTitleCase = (str) => {
 const PostItem = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
+  const { showToast } = useToast();
 
   const [image, setImage] = useState(null);
   const [preview, setPreview] = useState(null);
@@ -100,12 +102,12 @@ const PostItem = () => {
         headers: { 'Content-Type': 'multipart/form-data' }
       });
 
-      alert("Item Posted Successfully!");
+      showToast("Item Posted Successfully!", "success");
       navigate('/');
 
     } catch (error) {
       console.error("Post Error:", error);
-      alert("Failed to post item. Check console for details.");
+      showToast("Failed to post item. Check console for details.", "error");
     } finally {
       setLoading(false);
     }

@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react';
 import api from '../services/api';
 import { ShieldAlert, Clock, ArrowRight, MessageSquare, Search } from 'lucide-react';
+import { useToast } from '../context/ToastContext';
 import { motion } from 'framer-motion';
 
 const AdminChatLog = () => {
   const [logs, setLogs] = useState([]);
   const [loading, setLoading] = useState(true);
+  const { showToast } = useToast();
 
   useEffect(() => {
     const fetchLogs = async () => {
@@ -13,7 +15,7 @@ const AdminChatLog = () => {
         const response = await api.get('/messages/admin/all');
         setLogs(response.data);
       } catch (error) {
-        alert("Access Denied: Admins Only");
+        showToast("Access Denied: Admins Only", "error");
         console.log(error);
       } finally {
         setLoading(false);

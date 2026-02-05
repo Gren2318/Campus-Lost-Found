@@ -2,12 +2,14 @@ import { useEffect, useState, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import api from '../services/api';
 import { useAuth } from '../context/useAuth';
+import { useToast } from '../context/ToastContext';
 import { Send, ArrowLeft, User, ShieldAlert } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const ChatPage = () => {
   const { email } = useParams();
   const { user } = useAuth();
+  const { showToast } = useToast();
   const navigate = useNavigate();
 
   const [messages, setMessages] = useState([]);
@@ -50,7 +52,7 @@ const ChatPage = () => {
       setNewMessage('');
       setRefreshKey(prev => prev + 1);
     } catch (err) {
-      alert("Failed to send message");
+      showToast("Failed to send message", "error");
     }
   };
 
@@ -96,8 +98,8 @@ const ChatPage = () => {
                 className={`flex ${isMe ? 'justify-end' : 'justify-start'}`}
               >
                 <div className={`max-w-[75%] px-5 py-3.5 rounded-3xl shadow-sm text-[15px] leading-relaxed ${isMe
-                    ? 'bg-primary-600 text-white rounded-br-none shadow-primary-500/20'
-                    : 'bg-white text-gray-700 rounded-bl-none border border-gray-100'
+                  ? 'bg-primary-600 text-white rounded-br-none shadow-primary-500/20'
+                  : 'bg-white text-gray-700 rounded-bl-none border border-gray-100'
                   }`}>
                   <p>{msg.content}</p>
                   <p className={`text-[10px] mt-1.5 text-right font-medium opacity-80 ${isMe ? 'text-primary-100' : 'text-gray-400'}`}>

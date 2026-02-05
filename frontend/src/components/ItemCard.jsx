@@ -1,11 +1,13 @@
 import { Link } from 'react-router-dom';
 import { MapPin, Calendar, Trash2 } from 'lucide-react';
 import { useAuth } from '../context/useAuth';
+import { useToast } from '../context/ToastContext';
 import api from '../services/api';
 import { motion } from 'framer-motion';
 
 const ItemCard = ({ item, onDelete }) => {
   const { user } = useAuth();
+  const { showToast } = useToast();
 
   const isAdmin = user?.role === 'admin';
 
@@ -27,7 +29,7 @@ const ItemCard = ({ item, onDelete }) => {
         }
 
       } catch (err) {
-        alert("Failed to delete");
+        showToast("Failed to delete", "error");
         console.log(err);
       }
     }
@@ -53,8 +55,8 @@ const ItemCard = ({ item, onDelete }) => {
 
           <div className="absolute top-3 right-3">
             <span className={`px-3 py-1 rounded-full text-xs font-bold shadow-md backdrop-blur-md ${item.category === 'Lost'
-                ? 'bg-red-500/90 text-white'
-                : 'bg-green-500/90 text-white'
+              ? 'bg-red-500/90 text-white'
+              : 'bg-green-500/90 text-white'
               }`}>
               {item.category}
             </span>
