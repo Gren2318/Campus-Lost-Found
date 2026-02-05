@@ -29,9 +29,7 @@ const ChatPage = () => {
     };
 
     fetchChat();
-
     const interval = setInterval(fetchChat, 3000);
-
     return () => clearInterval(interval);
 
   }, [email, refreshKey]);
@@ -50,22 +48,19 @@ const ChatPage = () => {
         content: newMessage
       });
       setNewMessage('');
-
       setRefreshKey(prev => prev + 1);
-
     } catch (err) {
       alert("Failed to send message");
-      console.log(err);
     }
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-4 md:p-6 h-screen pt-20 flex flex-col">
+    <div className="max-w-4xl mx-auto h-screen pt-16 flex flex-col bg-gray-50">
 
       <motion.div
         initial={{ y: -20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        className="bg-white p-4 rounded-t-3xl flex items-center gap-4 border-b border-gray-100 shadow-sm z-10"
+        className="bg-white p-4 flex items-center gap-4 border-b border-gray-100 shadow-sm z-10 shrink-0"
       >
         <button onClick={() => navigate(-1)} className="text-gray-400 hover:text-primary-600 transition-colors p-2 hover:bg-gray-50 rounded-full">
           <ArrowLeft size={20} />
@@ -82,7 +77,7 @@ const ChatPage = () => {
         </div>
       </motion.div>
 
-      <div className="flex-1 bg-gray-50 overflow-y-auto p-6 space-y-6 custom-scrollbar shadow-inner">
+      <div className="flex-1 overflow-y-auto p-4 md:p-6 space-y-6 custom-scrollbar">
         {loading ? (
           <div className="text-center text-gray-400 mt-10">Loading encrypted chat...</div>
         ) : messages.length === 0 ? (
@@ -116,27 +111,28 @@ const ChatPage = () => {
         <div ref={scrollRef} />
       </div>
 
-      <motion.form
-        initial={{ y: 20, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        onSubmit={handleSend}
-        className="bg-white p-4 rounded-b-3xl border-t border-gray-100 flex gap-3 shadow-hard z-10"
-      >
-        <input
-          type="text"
-          value={newMessage}
-          onChange={(e) => setNewMessage(e.target.value)}
-          placeholder="Type a message..."
-          className="flex-1 bg-gray-50 border border-gray-200 text-gray-900 px-5 py-3.5 rounded-2xl focus:bg-white focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 outline-none transition-all font-medium placeholder:text-gray-400"
-        />
-        <button
-          type="submit"
-          disabled={!newMessage.trim()}
-          className="bg-primary-600 hover:bg-primary-700 text-white p-3.5 rounded-2xl transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-primary-500/30 hover:shadow-primary-600/40 hover:-translate-y-0.5 active:translate-y-0"
+      <div className="p-4 bg-white border-t border-gray-100 shrink-0">
+        <form
+          onSubmit={handleSend}
+          className="flex gap-3 max-w-4xl mx-auto"
         >
-          <Send size={22} />
-        </button>
-      </motion.form>
+          <input
+            type="text"
+            value={newMessage}
+            onChange={(e) => setNewMessage(e.target.value)}
+            placeholder="Type a message..."
+            className="flex-1 bg-gray-50 border border-gray-200 text-gray-900 px-5 py-3.5 rounded-2xl focus:bg-white focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 outline-none transition-all font-medium placeholder:text-gray-400"
+          />
+          <button
+            type="submit"
+            disabled={!newMessage.trim()}
+            className="bg-primary-600 hover:bg-primary-700 text-white p-3.5 rounded-2xl transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-primary-500/30 hover:shadow-primary-600/40 hover:-translate-y-0.5 active:translate-y-0"
+          >
+            <Send size={22} />
+          </button>
+        </form>
+      </div>
+
     </div>
   );
 };
