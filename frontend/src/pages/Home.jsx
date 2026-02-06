@@ -40,7 +40,7 @@ const Home = () => {
       item.location.toLowerCase().includes(text);
 
     return matchesCategory && matchesSearch;
-    return matchesCategory && matchesSearch;
+    
   });
 
   const handleDelete = (itemId) => {
