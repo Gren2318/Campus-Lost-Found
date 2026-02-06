@@ -5,7 +5,7 @@ import { useToast } from '../context/ToastContext';
 import api from '../services/api';
 import { motion } from 'framer-motion';
 
-const ItemCard = ({ item, onDelete }) => {
+const ItemCard = ({ item, onDelete, onDeleteAction }) => {
   const { user } = useAuth();
   const { showToast } = useToast();
 
@@ -17,6 +17,11 @@ const ItemCard = ({ item, onDelete }) => {
 
   const handleDeleteClick = async (e) => {
     e.preventDefault();
+
+    if (onDeleteAction) {
+      onDeleteAction(item._id);
+      return;
+    }
 
     if (window.confirm("Admin Action: Delete this post?")) {
       try {

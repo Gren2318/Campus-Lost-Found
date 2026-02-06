@@ -5,12 +5,15 @@ import { useAuth } from '../context/useAuth';
 import { useToast } from '../context/ToastContext';
 import { User, LogOut, Trash2 } from 'lucide-react';
 import { motion } from 'framer-motion';
+import ConfirmModal from '../components/ConfirmModal';
 
 const Profile = () => {
   const { user, logout } = useAuth();
   const { showToast } = useToast();
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [itemToDelete, setItemToDelete] = useState(null);
 
   useEffect(() => {
     const fetchMyItems = async () => {
@@ -27,12 +30,19 @@ const Profile = () => {
     fetchMyItems();
   }, []);
 
-  const handleDelete = async (itemId) => {
-    if (!window.confirm("Are you sure you want to delete this post?")) return;
+  const handleDelete = (itemId) => {
+    setItemToDelete(itemId);
+    setIsDeleteModalOpen(true);
+  };
+
+  const confirmDelete = async () => {
+    if (!itemToDelete) return;
 
     try {
-      await api.delete(`/items/${itemId}`);
-      setItems(items.filter(item => item._id !== itemId));
+      await api.delete(`/items/${itemToDelete}`);
+      setItems(items.filter(item => item._id !== itemToDelete));
+      setIsDeleteModalOpen(false);
+      setItemToDelete(null);
     } catch (error) {
       console.error("Failed to delete item:", error);
       showToast("Failed to delete item.", "error");
@@ -109,6 +119,14 @@ const Profile = () => {
           )}
         </div>
       )}
+
+      <ConfirmModal
+        isOpen={isDeleteModalOpen}
+        onClose={() => setIsDeleteModalOpen(false)}
+        onConfirm={confirmDelete}
+        title="Confirm Deletion"
+        message="Are you sure you want to delete this post?"
+      />
     </div>
   );
 };

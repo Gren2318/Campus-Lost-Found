@@ -3,12 +3,17 @@ import api from '../services/api';
 import ItemCard from '../components/ItemCard';
 import { Search, Filter, RefreshCw } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { useToast } from '../context/ToastContext';
+import ConfirmModal from '../components/ConfirmModal';
 
 const Home = () => {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('All');
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [itemToDelete, setItemToDelete] = useState(null);
+  const { showToast } = useToast();
 
   useEffect(() => {
     const fetchItems = async () => {
@@ -35,7 +40,28 @@ const Home = () => {
       item.location.toLowerCase().includes(text);
 
     return matchesCategory && matchesSearch;
+    return matchesCategory && matchesSearch;
   });
+
+  const handleDelete = (itemId) => {
+    setItemToDelete(itemId);
+    setIsDeleteModalOpen(true);
+  };
+
+  const confirmDelete = async () => {
+    if (!itemToDelete) return;
+
+    try {
+      await api.delete(`/items/${itemToDelete}`);
+      setItems(items.filter(item => item._id !== itemToDelete));
+      setIsDeleteModalOpen(false);
+      setItemToDelete(null);
+      showToast("Item deleted successfully", "success");
+    } catch (error) {
+      console.error("Failed to delete item:", error);
+      showToast("Failed to delete item.", "error");
+    }
+  };
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pt-24 min-h-screen">
@@ -64,8 +90,8 @@ const Home = () => {
             key={cat}
             onClick={() => setCategoryFilter(cat)}
             className={`px-6 py-2.5 rounded-xl font-medium transition-all whitespace-nowrap ${categoryFilter === cat
-                ? 'bg-primary-600 text-white shadow-lg shadow-primary-500/25 scale-105'
-                : 'bg-white text-gray-600 border border-gray-200 hover:bg-gray-50 hover:border-gray-300'
+              ? 'bg-primary-600 text-white shadow-lg shadow-primary-500/25 scale-105'
+              : 'bg-white text-gray-600 border border-gray-200 hover:bg-gray-50 hover:border-gray-300'
               }`}
           >
             {cat}
@@ -86,7 +112,11 @@ const Home = () => {
             className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
           >
             {filteredItems.map(item => (
-              <ItemCard key={item._id} item={item} />
+              <ItemCard
+                key={item._id}
+                item={item}
+                onDeleteAction={handleDelete}
+              />
             ))}
           </motion.div>
 
@@ -109,6 +139,15 @@ const Home = () => {
           )}
         </>
       )}
+
+
+      <ConfirmModal
+        isOpen={isDeleteModalOpen}
+        onClose={() => setIsDeleteModalOpen(false)}
+        onConfirm={confirmDelete}
+        title="Confirm Deletion"
+        message="Are you sure you want to delete this post?"
+      />
     </div>
   );
 };
