@@ -36,7 +36,10 @@ app.mount("/static", StaticFiles(directory=static_folder), name="static")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],
+    allow_origins=[
+        "http://localhost:5173", # Keep this for local coding
+        "https://campus-lost-found-nine.vercel.app" # 👈 EXACT Vercel URL (NO slash at the end!)
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
