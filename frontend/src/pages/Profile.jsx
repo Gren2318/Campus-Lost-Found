@@ -50,41 +50,43 @@ const Profile = () => {
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pt-24 min-h-screen">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pt-24 min-h-screen transition-colors duration-300">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="bg-white rounded-3xl p-8 mb-12 border border-gray-100 shadow-soft flex flex-col md:flex-row items-center justify-between gap-6"
+        className="glass-heavy dark:glass-dark rounded-[2.5rem] p-8 md:p-12 mb-12 border border-white/60 dark:border-gray-700/50 shadow-hard flex flex-col md:flex-row items-center justify-between gap-8 relative overflow-hidden"
       >
-        <div className="flex items-center gap-6">
-          <div className="w-20 h-20 bg-gradient-to-br from-primary-500 to-primary-600 rounded-full flex items-center justify-center text-white shadow-lg shadow-primary-500/30">
-            <User size={36} />
+        <div className="absolute top-0 right-0 w-64 h-64 bg-primary-400/10 dark:bg-primary-900/20 rounded-full mix-blend-multiply dark:mix-blend-lighten filter blur-[80px] pointer-events-none"></div>
+
+        <div className="flex flex-col md:flex-row items-center gap-8 relative z-10">
+          <div className="w-24 h-24 bg-gradient-to-br from-primary-400 to-primary-600 w-24 h-24 rounded-full flex items-center justify-center text-white shadow-glow flex-shrink-0">
+            <User size={40} />
           </div>
           <div className="text-center md:text-left">
-            <h1 className="text-3xl font-heading font-bold text-gray-900 mb-1">My Profile</h1>
-            <p className="text-gray-500 font-medium">{user?.email}</p>
+            <h1 className="text-4xl lg:text-5xl font-heading font-black text-gray-900 dark:text-white mb-2 tracking-tight">My Profile</h1>
+            <p className="text-gray-500 dark:text-gray-400 font-bold text-lg">{user?.email}</p>
           </div>
         </div>
 
         <button
           onClick={logout}
-          className="flex items-center gap-2 px-6 py-2.5 bg-red-50 text-red-600 hover:bg-red-100 hover:text-red-700 rounded-full transition-all border border-red-100 font-bold"
+          className="flex items-center gap-3 px-8 py-4 bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/40 hover:text-red-700 dark:hover:text-red-300 rounded-2xl transition-all border border-red-200 dark:border-red-800 font-black shadow-sm text-lg relative z-10 w-full md:w-auto justify-center"
         >
-          <LogOut size={18} /> Logout
+          <LogOut size={20} /> Logout
         </button>
       </motion.div>
 
-      <div className="flex items-center gap-3 mb-8">
-        <div className="h-8 w-1.5 bg-primary-500 rounded-full"></div>
-        <h2 className="text-2xl font-bold text-gray-900">
-          My Posted Items <span className="text-gray-400 font-normal ml-2">({items.length})</span>
+      <div className="flex items-center gap-4 mb-10 pl-2">
+        <div className="h-10 w-2 bg-primary-500 rounded-full"></div>
+        <h2 className="text-3xl font-heading font-black text-gray-900 dark:text-white tracking-tight">
+          My Posted Items <span className="text-gray-400 dark:text-gray-500 font-medium ml-2 text-2xl">({items.length})</span>
         </h2>
       </div>
 
       {loading ? (
-        <div className="flex justify-center py-20 text-gray-400">Loading...</div>
+        <div className="flex justify-center py-20 text-gray-400 dark:text-gray-500 font-bold text-lg animate-pulse">Loading...</div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        <div className="columns-1 sm:columns-2 lg:columns-3 xl:columns-4 gap-8 space-y-8 relative z-10">
           {items.length > 0 ? (
             items.map(item => (
               <motion.div
@@ -92,7 +94,7 @@ const Profile = () => {
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 key={item._id}
-                className="relative group h-full"
+                className="relative group h-full break-inside-avoid"
               >
 
                 <ItemCard item={item} />
@@ -102,19 +104,21 @@ const Profile = () => {
                     e.preventDefault();
                     handleDelete(item._id);
                   }}
-                  className="absolute top-2 left-2 bg-white text-red-500 border border-red-100 p-2 rounded-full opacity-0 group-hover:opacity-100 transition-all shadow-lg hover:bg-red-50 hover:scale-110 z-10"
+                  className="absolute top-4 left-4 bg-red-500/90 backdrop-blur-md text-white border border-red-400/50 p-3 rounded-2xl opacity-0 group-hover:opacity-100 transition-all shadow-lg hover:bg-red-600 hover:scale-110 z-20"
                   title="Delete Post"
                 >
-                  <Trash2 size={18} />
+                  <Trash2 size={20} />
                 </button>
               </motion.div>
             ))
           ) : (
-            <div className="col-span-full text-center py-24 bg-white rounded-3xl border border-dashed border-gray-200">
-              <div className="bg-gray-50 p-4 rounded-full inline-block mb-4">
-                <User size={32} className="text-gray-300" />
+            <div className="col-span-full text-center py-32 glass-soft dark:glass-dark rounded-[3rem] border-2 border-dashed border-gray-300 dark:border-gray-700 relative overflow-hidden">
+               <div className="absolute inset-0 pattern-bg opacity-5 pointer-events-none"></div>
+              <div className="bg-gray-100 dark:bg-gray-800 p-6 rounded-full inline-block mb-6 relative z-10 shadow-inner max-w-max mx-auto">
+                <User size={48} className="text-gray-400 dark:text-gray-500" />
               </div>
-              <p className="text-gray-500 text-lg font-medium">You haven't posted any items yet.</p>
+              <p className="text-gray-600 dark:text-gray-400 text-xl font-bold relative z-10">You haven't posted any items yet.</p>
+              <p className="text-gray-400 dark:text-gray-500 text-base mt-2 relative z-10 font-medium">Items you report lost or found will appear here.</p>
             </div>
           )}
         </div>

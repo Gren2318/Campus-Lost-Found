@@ -58,37 +58,37 @@ const ItemCard = ({ item, onDelete, onDeleteAction }) => {
     >
       <Link
         to={`/items/${item._id}`}
-        className="block glass-soft rounded-3xl overflow-hidden shadow-soft hover:shadow-medium border border-white/60 transition-all h-full flex flex-col"
+        className="block glass-soft dark:glass-dark rounded-[2rem] overflow-hidden shadow-soft hover:shadow-medium border border-white/60 dark:border-gray-700/50 transition-all h-full flex flex-col group/card"
       >
 
-        <div className="h-48 overflow-hidden bg-gray-100/50 relative p-2">
+        <div className="overflow-hidden bg-gray-100/50 dark:bg-gray-800/50 relative p-2 m-2 rounded-3xl">
           <img
             src={imageUrl}
             alt={item.title}
-            className="w-full h-full object-cover rounded-2xl shadow-sm transition-transform duration-700 group-hover:scale-105"
+            className="w-full h-auto min-h-[160px] object-cover rounded-2xl shadow-sm transition-transform duration-700 group-hover/card:scale-105"
           />
 
-          <div className="absolute top-3 right-3">
-            <span className={`px-3 py-1 rounded-full text-xs font-bold shadow-md backdrop-blur-md ${item.category === 'Lost'
-              ? 'bg-red-500/90 text-white'
-              : 'bg-green-500/90 text-white'
+          <div className="absolute top-4 right-4 z-10">
+            <span className={`px-4 py-1.5 rounded-full text-xs font-black shadow-lg backdrop-blur-md uppercase tracking-wider ${item.category === 'Lost'
+              ? 'bg-red-500/90 text-white border border-red-400/50'
+              : 'bg-emerald-500/90 text-white border border-emerald-400/50'
               }`}>
               {item.category}
             </span>
           </div>
         </div>
 
-        <div className="p-5 flex flex-col flex-grow">
-          <h3 className="text-xl font-heading font-bold text-gray-900 mb-2 line-clamp-1 group-hover:text-primary-600 transition-colors">
+        <div className="p-6 flex flex-col flex-grow">
+          <h3 className="text-2xl font-heading font-black text-gray-900 dark:text-white mb-3 line-clamp-2 group-hover/card:text-primary-600 dark:group-hover/card:text-primary-400 transition-colors leading-tight">
             {item.title}
           </h3>
 
-          <div className="flex items-center gap-2 text-gray-500 text-sm mb-3">
-            <MapPin size={16} className="text-primary-400" />
+          <div className="flex items-center gap-2 text-gray-500 dark:text-gray-400 text-sm mb-4 font-medium">
+            <MapPin size={18} className="text-primary-500 shrink-0" />
             <span className="truncate">{item.location}</span>
           </div>
 
-          <div className="flex items-center gap-2 text-gray-400 text-xs mt-auto pt-4 border-t border-gray-100">
+          <div className="flex items-center gap-2 text-gray-400 dark:text-gray-500 text-xs mt-auto pt-5 border-t border-gray-100 dark:border-gray-800 font-bold uppercase tracking-wide">
             <Calendar size={14} />
             <span>{item.date_lost}</span>
           </div>

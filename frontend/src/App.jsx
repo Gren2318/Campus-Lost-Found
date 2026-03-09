@@ -29,17 +29,21 @@ const RootRoute = () => {
 };
 
 import { ToastProvider } from './context/ToastContext';
+import { ThemeProvider } from './context/ThemeContext';
 
 function App() {
   return (
-    <ToastProvider>
+    <ThemeProvider>
+      <ToastProvider>
       <AuthProvider>
         <Router>
-          <div className="min-h-screen bg-gray-50 text-gray-900 font-sans">
+          <div className="min-h-screen bg-transparent font-sans flex text-gray-900 dark:text-gray-100 transition-colors duration-300 relative">
             <Navbar />
-            <Routes>
+            
+            <div className="flex-1 md:ml-20 w-full mb-20 md:mb-0 transition-all duration-300 mt-16 md:mt-0">
+              <Routes>
 
-              <Route path="/" element={<RootRoute />} />
+                <Route path="/" element={<RootRoute />} />
               <Route path="/landing" element={<Landing />} />
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
@@ -100,11 +104,13 @@ function App() {
 
               <Route path="*" element={<Navigate to="/" />} />
 
-            </Routes>
+              </Routes>
+            </div>
           </div>
         </Router>
       </AuthProvider>
     </ToastProvider>
+    </ThemeProvider>
   );
 }
 

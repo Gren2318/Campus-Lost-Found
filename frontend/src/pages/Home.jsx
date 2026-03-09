@@ -95,14 +95,14 @@ const Home = () => {
           <AnimatedDoodle type="underline" className="-bottom-6 left-0 w-48 h-12 text-primary-400" strokeWidth={5} />
         </div>
 
-        <div className="relative w-full md:w-96 group">
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-primary-500 group-focus-within:text-primary-600 transition-colors z-20" size={20} />
+        <div className="relative w-full md:w-[450px] group shrink-0">
+          <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-primary-500 transition-colors z-20" size={24} />
           <input
             type="text"
             placeholder="Search keys, backpack, library..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full glass-soft rounded-3xl py-4 pl-12 pr-4 text-gray-900 focus:glass-heavy focus:border-primary-400 focus:ring-4 focus:ring-primary-500/20 outline-none transition-all font-medium placeholder:text-gray-400 z-10 relative"
+            className="w-full glass-soft dark:glass-dark rounded-[2rem] py-5 pl-14 pr-6 text-gray-900 dark:text-white focus:bg-white dark:focus:bg-gray-800 focus:border-primary-500 focus:ring-8 focus:ring-primary-500/10 outline-none transition-all font-medium placeholder:text-gray-400 dark:placeholder:text-gray-500 shadow-lg text-lg border border-white/60 dark:border-gray-700/50 z-10 relative"
           />
         </div>
       </motion.div>
@@ -118,9 +118,9 @@ const Home = () => {
             whileTap={{ scale: 0.95 }}
             key={cat}
             onClick={() => setCategoryFilter(cat)}
-            className={`px-6 py-2.5 rounded-2xl font-bold transition-all whitespace-nowrap ${categoryFilter === cat
-              ? 'bg-primary-600 text-white shadow-glow hover:shadow-glow-hover border border-primary-500'
-              : 'glass-soft text-gray-600 hover:glass border border-white/60 hover:text-primary-600'
+            className={`px-8 py-3 rounded-full font-black transition-all whitespace-nowrap text-lg ${categoryFilter === cat
+              ? 'bg-gray-900 dark:bg-white text-white dark:text-gray-900 shadow-hard border-2 border-transparent hover:-translate-y-1'
+              : 'glass-soft dark:glass-dark text-gray-600 dark:text-gray-400 hover:bg-white dark:hover:bg-gray-800 border-2 border-transparent hover:border-gray-200 dark:hover:border-gray-700'
               }`}
           >
             {cat}
@@ -139,14 +139,15 @@ const Home = () => {
             variants={containerVariants}
             initial="hidden"
             animate="visible"
-            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 relative z-10"
+            className="columns-1 sm:columns-2 lg:columns-3 xl:columns-4 gap-8 space-y-8 relative z-10"
           >
             {filteredItems.map(item => (
-              <ItemCard
-                key={item._id}
-                item={item}
-                onDeleteAction={handleDelete}
-              />
+              <div key={item._id} className="break-inside-avoid">
+                <ItemCard
+                  item={item}
+                  onDeleteAction={handleDelete}
+                />
+              </div>
             ))}
           </motion.div>
 
