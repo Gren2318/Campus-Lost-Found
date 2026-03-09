@@ -15,9 +15,19 @@
 
 @layer utilities {
   .glass {
-    @apply bg-white/70 backdrop-blur-lg border border-white/20 shadow-lg;
+    @apply bg-white/40 backdrop-blur-xl border border-white/60 shadow-lg;
   }
   .glass-dark {
-    @apply bg-gray-900/80 backdrop-blur-lg border border-gray-800/50 shadow-lg;
+    @apply bg-gray-900/40 backdrop-blur-xl border border-gray-700/50 shadow-lg;
+  }
+  .glass-soft {
+    @apply bg-white/60 backdrop-blur-lg border border-white/40 shadow-soft;
+  }
+  .glass-heavy {
+    @apply bg-white/30 backdrop-blur-2xl border border-white/70 shadow-hard;
+  }
+  .pattern-bg {
+    background-image: radial-gradient(#bae6fd 1px, transparent 1px);
+    background-size: 20px 20px;
   }
 }

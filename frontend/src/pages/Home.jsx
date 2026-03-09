@@ -5,6 +5,17 @@ import { Search, Filter, RefreshCw } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useToast } from '../context/ToastContext';
 import ConfirmModal from '../components/ConfirmModal';
+import AnimatedDoodle from '../components/AnimatedDoodle';
+
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1
+    }
+  }
+};
 
 const Home = () => {
   const [items, setItems] = useState([]);
@@ -64,40 +75,58 @@ const Home = () => {
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pt-24 min-h-screen">
+    <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pt-24 min-h-screen pattern-bg">
+      
+      {/* Background Blobs */}
+      <div className="absolute top-20 left-10 w-64 h-64 bg-primary-300 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob pointer-events-none"></div>
+      <div className="absolute top-40 right-10 w-72 h-72 bg-purple-300 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob animation-delay-2000 pointer-events-none"></div>
 
-      <div className="flex flex-col md:flex-row justify-between items-end mb-10 gap-6">
-        <div>
-          <h1 className="text-4xl font-heading font-bold text-gray-900 mb-2">Campus Feed</h1>
-          <p className="text-gray-500 text-lg">Real-time lost and found updates</p>
+      <motion.div 
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="flex flex-col md:flex-row justify-between items-end mb-10 gap-6 relative z-10"
+      >
+        <div className="relative">
+          <AnimatedDoodle type="star" className="-top-8 -left-8 w-16 h-16 text-yellow-400" strokeWidth={4} />
+          <h1 className="text-5xl font-heading font-black text-gray-900 mb-2 tracking-tight">
+            Campus <span className="text-primary-600">Feed</span>
+          </h1>
+          <p className="text-gray-500 text-lg font-medium">Real-time lost and found updates</p>
+          <AnimatedDoodle type="underline" className="-bottom-6 left-0 w-48 h-12 text-primary-400" strokeWidth={5} />
         </div>
 
         <div className="relative w-full md:w-96 group">
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-primary-500 transition-colors" size={20} />
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-primary-500 group-focus-within:text-primary-600 transition-colors z-20" size={20} />
           <input
             type="text"
             placeholder="Search keys, backpack, library..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full bg-white border border-gray-200 rounded-2xl py-3 pl-12 pr-4 text-gray-900 focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 outline-none shadow-sm transition-all"
+            className="w-full glass-soft rounded-3xl py-4 pl-12 pr-4 text-gray-900 focus:glass-heavy focus:border-primary-400 focus:ring-4 focus:ring-primary-500/20 outline-none transition-all font-medium placeholder:text-gray-400 z-10 relative"
           />
         </div>
-      </div>
+      </motion.div>
 
-      <div className="flex gap-3 mb-10 overflow-x-auto pb-2 scrollbar-hide">
+      <motion.div 
+        initial={{ opacity: 0, x: -20 }}
+        animate={{ opacity: 1, x: 0 }}
+        className="flex gap-3 mb-10 overflow-x-auto pb-4 scrollbar-hide relative z-10 px-2"
+      >
         {['All', 'Lost', 'Found'].map((cat) => (
-          <button
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
             key={cat}
             onClick={() => setCategoryFilter(cat)}
-            className={`px-6 py-2.5 rounded-xl font-medium transition-all whitespace-nowrap ${categoryFilter === cat
-              ? 'bg-primary-600 text-white shadow-lg shadow-primary-500/25 scale-105'
-              : 'bg-white text-gray-600 border border-gray-200 hover:bg-gray-50 hover:border-gray-300'
+            className={`px-6 py-2.5 rounded-2xl font-bold transition-all whitespace-nowrap ${categoryFilter === cat
+              ? 'bg-primary-600 text-white shadow-glow hover:shadow-glow-hover border border-primary-500'
+              : 'glass-soft text-gray-600 hover:glass border border-white/60 hover:text-primary-600'
               }`}
           >
             {cat}
-          </button>
+          </motion.button>
         ))}
-      </div>
+      </motion.div>
 
       {loading ? (
         <div className="flex flex-col items-center justify-center py-32 text-gray-400">
@@ -107,9 +136,10 @@ const Home = () => {
       ) : (
         <>
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
+            variants={containerVariants}
+            initial="hidden"
+            animate="visible"
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 relative z-10"
           >
             {filteredItems.map(item => (
               <ItemCard

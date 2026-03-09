@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/useAuth';
 import { useToast } from '../context/ToastContext';
 import { motion } from 'framer-motion';
+import AnimatedDoodle from '../components/AnimatedDoodle';
 
 const toTitleCase = (str) => {
   return str.replace(
@@ -114,21 +115,50 @@ const PostItem = () => {
   };
 
   return (
-    <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pt-24 min-h-screen">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
+    <div className="relative max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pt-24 min-h-screen pattern-bg overflow-hidden">
+      
+      {/* Background Blobs for playful feel */}
+      <div className="absolute top-0 right-0 w-80 h-80 bg-primary-200 rounded-full mix-blend-multiply filter blur-3xl opacity-40 animate-blob pointer-events-none"></div>
+      <div className="absolute bottom-20 left-10 w-72 h-72 bg-purple-200 rounded-full mix-blend-multiply filter blur-3xl opacity-40 animate-blob animation-delay-2000 pointer-events-none"></div>
+
+      {/* Interactive Floating Toys */}
+      <motion.div 
+        drag 
+        dragConstraints={{ left: -100, right: 100, top: -50, bottom: 50 }}
+        whileDrag={{ scale: 1.1, cursor: "grabbing" }}
+        className="absolute top-32 right-10 w-16 h-16 bg-gradient-to-br from-primary-400 to-purple-400 rounded-2xl shadow-lg cursor-grab z-0 animate-float hidden md:flex items-center justify-center opacity-80"
       >
-        <h1 className="text-3xl font-heading font-bold text-gray-900 mb-8 flex items-center gap-3">
-          <div className="bg-primary-50 p-2 rounded-xl text-primary-600">
-            <Camera size={28} />
-          </div>
+        <Sparkles className="text-white" size={24} />
+      </motion.div>
+      <motion.div 
+        drag 
+        dragConstraints={{ left: -100, right: 100, top: -50, bottom: 50 }}
+        whileDrag={{ scale: 1.1, rotate: 15, cursor: "grabbing" }}
+        className="absolute top-64 left-10 w-12 h-12 bg-gradient-to-br from-yellow-300 to-orange-400 rounded-full shadow-lg cursor-grab z-0 animate-float animation-delay-1000 hidden md:block opacity-80"
+      />
+
+      <motion.div
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ type: "spring", stiffness: 200, damping: 20 }}
+        className="relative z-10"
+      >
+        <h1 className="text-4xl font-heading font-black text-gray-900 mb-8 flex items-center gap-4 relative">
+          <motion.div 
+            whileHover={{ rotate: 15, scale: 1.1 }}
+            className="bg-primary-100 p-3 rounded-2xl text-primary-600 shadow-sm"
+          >
+            <Camera size={32} />
+          </motion.div>
           Post Lost Item
+          <AnimatedDoodle type="arrow" className="-top-4 -right-16 w-16 h-16 text-primary-400" strokeWidth={4} />
         </h1>
 
-        <div className="bg-white rounded-3xl p-8 border border-gray-100 shadow-hard">
+        <div className="glass rounded-3xl p-8 shadow-hard relative overflow-hidden">
+          
+          <AnimatedDoodle type="circle" className="-bottom-16 -right-16 w-32 h-32 text-primary-200 opacity-50" strokeWidth={2} />
 
-          <div className="mb-8 relative border-2 border-dashed border-gray-300 rounded-2xl p-8 text-center hover:bg-gray-50 hover:border-primary-400 transition-all group overflow-hidden">
+          <div className="mb-8 relative border-2 border-dashed border-gray-300 rounded-2xl p-8 text-center bg-white/50 hover:bg-white/80 hover:border-primary-400 transition-all group overflow-hidden shadow-inner">
             <input
               type="file"
               className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-20"
@@ -165,12 +195,12 @@ const PostItem = () => {
           <form onSubmit={handleSubmit} className="space-y-6">
 
             <div>
-              <label className="block text-gray-700 text-sm font-bold mb-2">Title</label>
+              <label className="block text-gray-700 text-sm font-bold mb-2 ml-2">Title</label>
               <input
                 type="text"
                 value={formData.title}
                 onChange={e => setFormData({ ...formData, title: e.target.value })}
-                className="w-full bg-gray-50 border border-gray-200 rounded-xl p-3.5 text-gray-900 focus:bg-white focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 outline-none transition-all font-medium"
+                className="w-full glass-soft border border-white/60 rounded-2xl p-4 text-gray-900 focus:bg-white focus:border-primary-500 focus:ring-4 focus:ring-primary-500/20 outline-none transition-all font-medium placeholder:text-gray-400 shadow-sm"
                 placeholder={analyzing ? "AI is writing title..." : "e.g. Blue Backpack"}
                 required
               />
@@ -178,12 +208,12 @@ const PostItem = () => {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <label className="block text-gray-700 text-sm font-bold mb-2">Category</label>
+                <label className="block text-gray-700 text-sm font-bold mb-2 ml-2">Category</label>
                 <div className="relative">
                   <select
                     value={formData.category}
                     onChange={e => setFormData({ ...formData, category: e.target.value })}
-                    className="w-full bg-gray-50 border border-gray-200 rounded-xl p-3.5 text-gray-900 focus:bg-white focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 outline-none appearance-none transition-all font-medium"
+                    className="w-full glass-soft border border-white/60 rounded-2xl p-4 text-gray-900 focus:bg-white focus:border-primary-500 focus:ring-4 focus:ring-primary-500/20 outline-none appearance-none transition-all font-medium shadow-sm"
                   >
                     <option>Lost</option>
                     <option>Found</option>
@@ -194,14 +224,14 @@ const PostItem = () => {
                 </div>
               </div>
               <div>
-                <label className="block text-gray-700 text-sm font-bold mb-2">Location</label>
-                <div className="relative">
-                  <MapPin className="absolute left-3.5 top-3.5 text-gray-400" size={20} />
+                <label className="block text-gray-700 text-sm font-bold mb-2 ml-2">Location</label>
+                <div className="relative group">
+                  <MapPin className="absolute left-4 top-4 text-gray-400 group-focus-within:text-primary-500 transition-colors" size={20} />
                   <input
                     type="text"
                     value={formData.location}
                     onChange={e => setFormData({ ...formData, location: e.target.value })}
-                    className="w-full bg-gray-50 border border-gray-200 rounded-xl p-3.5 pl-11 text-gray-900 focus:bg-white focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 outline-none transition-all font-medium"
+                    className="w-full glass-soft border border-white/60 rounded-2xl p-4 pl-12 text-gray-900 focus:bg-white focus:border-primary-500 focus:ring-4 focus:ring-primary-500/20 outline-none transition-all font-medium placeholder:text-gray-400 shadow-sm"
                     placeholder="e.g. Library"
                     required
                   />
@@ -210,25 +240,28 @@ const PostItem = () => {
             </div>
 
             <div>
-              <label className="block text-gray-700 text-sm font-bold mb-2">Description</label>
+              <label className="block text-gray-700 text-sm font-bold mb-2 ml-2">Description</label>
               <textarea
                 rows="4"
                 value={formData.description}
                 onChange={e => setFormData({ ...formData, description: e.target.value })}
-                className="w-full bg-gray-50 border border-gray-200 rounded-xl p-3.5 text-gray-900 focus:bg-white focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 outline-none transition-all font-medium resize-none"
+                className="w-full glass-soft border border-white/60 rounded-2xl p-4 text-gray-900 focus:bg-white focus:border-primary-500 focus:ring-4 focus:ring-primary-500/20 outline-none transition-all font-medium resize-none placeholder:text-gray-400 shadow-sm"
                 placeholder={analyzing ? "AI is describing the item..." : "Describe the item..."}
                 required
               />
             </div>
 
-            <button
+            <motion.button
+              whileTap={{ scale: 0.95, rotate: -2 }}
+              whileHover={{ y: -4, shadow: '0 20px 25px -5px rgba(14, 165, 233, 0.4)' }}
+              transition={{ type: "spring", stiffness: 400, damping: 10 }}
               type="submit"
               disabled={loading || analyzing}
-              className={`w-full py-4 rounded-xl font-bold text-lg flex items-center justify-center gap-2 transition-all shadow-lg hover:-translate-y-0.5 active:translate-y-0 ${loading ? 'bg-gray-100 text-gray-400 cursor-not-allowed shadow-none' : 'bg-primary-600 hover:bg-primary-700 shadow-primary-500/30 text-white'
+              className={`w-full py-5 rounded-2xl font-black text-xl flex items-center justify-center gap-3 transition-colors shadow-glow ${loading ? 'bg-gray-200 text-gray-500 cursor-not-allowed shadow-none' : 'bg-primary-600 hover:bg-primary-500 text-white'
                 }`}
             >
               {loading ? <Loader className="animate-spin" /> : 'Post Item'}
-            </button>
+            </motion.button>
 
           </form>
         </div>

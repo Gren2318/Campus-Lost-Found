@@ -5,6 +5,15 @@ import { useToast } from '../context/ToastContext';
 import api from '../services/api';
 import { motion } from 'framer-motion';
 
+const itemVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { 
+    opacity: 1, 
+    y: 0,
+    transition: { type: "spring", stiffness: 300, damping: 24 }
+  }
+};
+
 const ItemCard = ({ item, onDelete, onDeleteAction }) => {
   const { user } = useAuth();
   const { showToast } = useToast();
@@ -42,20 +51,21 @@ const ItemCard = ({ item, onDelete, onDeleteAction }) => {
 
   return (
     <motion.div
-      whileHover={{ y: -5 }}
-      transition={{ type: "spring", stiffness: 300 }}
+      variants={itemVariants}
+      whileHover={{ y: -8, scale: 1.02 }}
+      transition={{ type: "spring", stiffness: 400, damping: 17 }}
       className="relative group h-full"
     >
       <Link
         to={`/items/${item._id}`}
-        className="block bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-soft hover:shadow-medium transition-all h-full flex flex-col"
+        className="block glass-soft rounded-3xl overflow-hidden shadow-soft hover:shadow-medium border border-white/60 transition-all h-full flex flex-col"
       >
 
-        <div className="h-48 overflow-hidden bg-gray-100 relative">
+        <div className="h-48 overflow-hidden bg-gray-100/50 relative p-2">
           <img
             src={imageUrl}
             alt={item.title}
-            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+            className="w-full h-full object-cover rounded-2xl shadow-sm transition-transform duration-700 group-hover:scale-105"
           />
 
           <div className="absolute top-3 right-3">
