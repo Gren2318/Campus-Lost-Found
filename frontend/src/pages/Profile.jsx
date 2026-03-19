@@ -63,14 +63,14 @@ const Profile = () => {
             <User size={40} />
           </div>
           <div className="text-center md:text-left">
-            <h1 className="text-4xl lg:text-5xl font-heading font-black text-gray-900 dark:text-white mb-2 tracking-tight">My Profile</h1>
-            <p className="text-gray-500 dark:text-gray-400 font-bold text-lg">{user?.email}</p>
+            <h1 className="text-2xl lg:text-3xl font-heading font-black text-gray-900 dark:text-white mb-1 tracking-tight">My Profile</h1>
+            <p className="text-gray-500 dark:text-gray-400 font-semibold text-sm">{user?.email}</p>
           </div>
         </div>
 
         <button
           onClick={logout}
-          className="flex items-center gap-3 px-8 py-4 bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/40 hover:text-red-700 dark:hover:text-red-300 rounded-2xl transition-all border border-red-200 dark:border-red-800 font-black shadow-sm text-lg relative z-10 w-full md:w-auto justify-center"
+          className="flex items-center gap-3 px-6 py-3 bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/40 hover:text-red-700 dark:hover:text-red-300 rounded-2xl transition-all border border-red-200 dark:border-red-800 font-bold shadow-sm text-sm relative z-10 w-full md:w-auto justify-center"
         >
           <LogOut size={20} /> Logout
         </button>
@@ -78,8 +78,8 @@ const Profile = () => {
 
       <div className="flex items-center gap-4 mb-10 pl-2">
         <div className="h-10 w-2 bg-primary-500 rounded-full"></div>
-        <h2 className="text-3xl font-heading font-black text-gray-900 dark:text-white tracking-tight">
-          My Posted Items <span className="text-gray-400 dark:text-gray-500 font-medium ml-2 text-2xl">({items.length})</span>
+        <h2 className="text-xl font-heading font-black text-gray-900 dark:text-white tracking-tight">
+          My Posted Items <span className="text-gray-400 dark:text-gray-500 font-medium ml-2 text-base">({items.length})</span>
         </h2>
       </div>
 

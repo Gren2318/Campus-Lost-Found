@@ -57,21 +57,21 @@ const ChatPage = () => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto h-screen pt-16 flex flex-col bg-gray-50">
+    <div className="max-w-4xl mx-auto h-screen pt-16 flex flex-col bg-black">
 
       <motion.div
         initial={{ y: -20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        className="bg-white p-4 flex items-center gap-4 border-b border-gray-100 shadow-sm z-10 shrink-0"
+        className="bg-gray-900 p-4 flex items-center gap-4 border-b border-gray-800 shadow-sm z-10 shrink-0"
       >
-        <button onClick={() => navigate(-1)} className="text-gray-400 hover:text-primary-600 transition-colors p-2 hover:bg-gray-50 rounded-full">
+        <button onClick={() => navigate(-1)} className="text-gray-400 hover:text-primary-400 transition-colors p-2 hover:bg-gray-800 rounded-full">
           <ArrowLeft size={20} />
         </button>
         <div className="bg-gradient-to-br from-primary-500 to-primary-600 p-2.5 rounded-full text-white shadow-lg shadow-primary-500/20">
           <User size={20} />
         </div>
         <div>
-          <h2 className="text-gray-900 font-bold text-lg leading-tight">{email.split('@')[0]}</h2>
+          <h2 className="text-white font-bold text-base leading-tight">{email.split('@')[0]}</h2>
           <p className="text-amber-500 text-xs flex items-center gap-1 font-medium bg-amber-50 px-2 py-0.5 rounded-full w-fit mt-0.5">
             <ShieldAlert size={10} />
             Admin Monitors Chats
@@ -79,13 +79,13 @@ const ChatPage = () => {
         </div>
       </motion.div>
 
-      <div className="flex-1 overflow-y-auto p-4 md:p-6 space-y-6 custom-scrollbar">
+      <div className="flex-1 overflow-y-auto p-4 md:p-6 space-y-6 scrollbar-hide">
         {loading ? (
-          <div className="text-center text-gray-400 mt-10">Loading encrypted chat...</div>
+          <div className="text-center text-gray-500 mt-10">Loading encrypted chat...</div>
         ) : messages.length === 0 ? (
           <div className="text-center text-gray-400 mt-10">
-            <p className="font-medium text-lg text-gray-500 mb-1">No messages yet.</p>
-            <p className="text-sm">Say "Hi" to start the conversation!</p>
+            <p className="font-medium text-base text-gray-400 mb-1">No messages yet.</p>
+            <p className="text-sm text-gray-500">Say &quot;Hi&quot; to start the conversation!</p>
           </div>
         ) : (
           messages.map((msg) => {
@@ -97,9 +97,9 @@ const ChatPage = () => {
                 key={msg.id}
                 className={`flex ${isMe ? 'justify-end' : 'justify-start'}`}
               >
-                <div className={`max-w-[75%] px-5 py-3.5 rounded-3xl shadow-sm text-[15px] leading-relaxed ${isMe
+                <div className={`max-w-[75%] px-5 py-3 rounded-3xl shadow-sm text-sm leading-relaxed ${isMe
                   ? 'bg-primary-600 text-white rounded-br-none shadow-primary-500/20'
-                  : 'bg-white text-gray-700 rounded-bl-none border border-gray-100'
+                  : 'bg-gray-800 text-gray-200 rounded-bl-none border border-gray-700'
                   }`}>
                   <p>{msg.content}</p>
                   <p className={`text-[10px] mt-1.5 text-right font-medium opacity-80 ${isMe ? 'text-primary-100' : 'text-gray-400'}`}>
@@ -113,7 +113,7 @@ const ChatPage = () => {
         <div ref={scrollRef} />
       </div>
 
-      <div className="p-4 bg-white border-t border-gray-100 shrink-0">
+      <div className="p-4 bg-gray-900 border-t border-gray-800 shrink-0">
         <form
           onSubmit={handleSend}
           className="flex gap-3 max-w-4xl mx-auto"
@@ -123,7 +123,7 @@ const ChatPage = () => {
             value={newMessage}
             onChange={(e) => setNewMessage(e.target.value)}
             placeholder="Type a message..."
-            className="flex-1 bg-gray-50 border border-gray-200 text-gray-900 px-5 py-3.5 rounded-2xl focus:bg-white focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 outline-none transition-all font-medium placeholder:text-gray-400"
+            className="flex-1 bg-gray-800 border border-gray-700 text-gray-100 px-5 py-3 rounded-2xl focus:bg-gray-700 focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 outline-none transition-all font-medium placeholder:text-gray-500 text-sm"
           />
           <button
             type="submit"

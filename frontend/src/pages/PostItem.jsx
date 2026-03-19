@@ -150,11 +150,11 @@ const PostItem = () => {
           >
             <Camera size={40} />
           </motion.div>
-          <h1 className="text-5xl md:text-6xl font-heading font-black text-gray-900 dark:text-white tracking-tight relative">
+          <h1 className="text-3xl md:text-4xl font-heading font-black text-gray-900 dark:text-white tracking-tight relative">
             Report an Item
             <AnimatedDoodle type="arrow" className="absolute -top-4 -right-16 w-20 h-20 text-primary-400 hidden md:block" strokeWidth={4} />
           </h1>
-          <p className="text-gray-500 dark:text-gray-400 mt-4 text-lg font-medium max-w-xl">Snap a photo and describe where you lost or found it. AI will handle the rest.</p>
+          <p className="text-gray-500 dark:text-gray-400 mt-3 text-sm font-medium max-w-xl">Snap a photo and describe where you lost or found it. AI will handle the rest.</p>
         </div>
 
         <div className="glass-heavy dark:glass-dark rounded-[2.5rem] p-6 md:p-12 shadow-hard relative overflow-hidden border border-white/60 dark:border-gray-700/50">
@@ -176,7 +176,7 @@ const PostItem = () => {
                 {analyzing && (
                   <div className="absolute inset-0 bg-black/60 flex flex-col items-center justify-center rounded-2xl backdrop-blur-md">
                     <Sparkles className="text-yellow-400 animate-spin mb-4" size={56} />
-                    <p className="font-black text-white text-lg tracking-wide animate-pulse">AI is mapping details...</p>
+                    <p className="font-black text-white text-sm tracking-wide animate-pulse">AI is mapping details...</p>
                   </div>
                 )}
 
@@ -189,8 +189,8 @@ const PostItem = () => {
                 <div className="bg-gray-100 dark:bg-gray-700/50 p-6 rounded-full mb-6 group-hover:bg-primary-50 dark:group-hover:bg-primary-900/30 transition-colors">
                   <Upload size={40} className="text-gray-500 dark:text-gray-400 group-hover:text-primary-500" />
                 </div>
-                <p className="text-2xl font-black text-gray-700 dark:text-gray-300 group-hover:text-primary-700 dark:group-hover:text-primary-300">Upload a Photo</p>
-                <p className="text-base text-gray-500 dark:text-gray-400 mt-2 font-medium">JPEG, PNG, SVG • AI Auto-fill active ✨</p>
+                <p className="text-lg font-black text-gray-700 dark:text-gray-300 group-hover:text-primary-700 dark:group-hover:text-primary-300">Upload a Photo</p>
+                <p className="text-sm text-gray-500 dark:text-gray-400 mt-2 font-medium">JPEG, PNG, SVG • AI Auto-fill active ✨</p>
               </div>
             )}
           </div>
@@ -203,7 +203,7 @@ const PostItem = () => {
                 type="text"
                 value={formData.title}
                 onChange={e => setFormData({ ...formData, title: e.target.value })}
-                className="w-full glass-soft dark:glass-dark border border-white/60 dark:border-gray-700 rounded-2xl p-4 text-gray-900 dark:text-white focus:bg-white dark:focus:bg-gray-800 focus:border-primary-500 focus:ring-4 focus:ring-primary-500/20 outline-none transition-all font-medium placeholder:text-gray-400 dark:placeholder:text-gray-500 shadow-sm text-lg"
+                className="w-full glass-soft dark:glass-dark border border-white/60 dark:border-gray-700 rounded-2xl p-3.5 text-gray-900 dark:text-white focus:bg-white dark:focus:bg-gray-800 focus:border-primary-500 focus:ring-4 focus:ring-primary-500/20 outline-none transition-all font-medium placeholder:text-gray-400 dark:placeholder:text-gray-500 shadow-sm text-sm"
                 placeholder={analyzing ? "AI is generating..." : "e.g. Hydroflask Water Bottle"}
                 required
               />
@@ -216,7 +216,7 @@ const PostItem = () => {
                   <select
                     value={formData.category}
                     onChange={e => setFormData({ ...formData, category: e.target.value })}
-                    className="w-full glass-soft dark:glass-dark border border-white/60 dark:border-gray-700 rounded-2xl p-4 text-gray-900 dark:text-white focus:bg-white dark:focus:bg-gray-800 focus:border-primary-500 focus:ring-4 focus:ring-primary-500/20 outline-none appearance-none transition-all font-medium shadow-sm text-lg cursor-pointer"
+                    className="w-full glass-soft dark:glass-dark border border-white/60 dark:border-gray-700 rounded-2xl p-3.5 text-gray-900 dark:text-white focus:bg-white dark:focus:bg-gray-800 focus:border-primary-500 focus:ring-4 focus:ring-primary-500/20 outline-none appearance-none transition-all font-medium shadow-sm text-sm cursor-pointer"
                   >
                     <option>Lost</option>
                     <option>Found</option>
@@ -234,7 +234,7 @@ const PostItem = () => {
                     type="text"
                     value={formData.location}
                     onChange={e => setFormData({ ...formData, location: e.target.value })}
-                    className="w-full glass-soft dark:glass-dark border border-white/60 dark:border-gray-700 rounded-2xl p-4 pl-12 text-gray-900 dark:text-white focus:bg-white dark:focus:bg-gray-800 focus:border-primary-500 focus:ring-4 focus:ring-primary-500/20 outline-none transition-all font-medium placeholder:text-gray-400 dark:placeholder:text-gray-500 shadow-sm text-lg"
+                    className="w-full glass-soft dark:glass-dark border border-white/60 dark:border-gray-700 rounded-2xl p-3.5 pl-12 text-gray-900 dark:text-white focus:bg-white dark:focus:bg-gray-800 focus:border-primary-500 focus:ring-4 focus:ring-primary-500/20 outline-none transition-all font-medium placeholder:text-gray-400 dark:placeholder:text-gray-500 shadow-sm text-sm"
                     placeholder="e.g. Student Union Floor 2"
                     required
                   />
@@ -248,7 +248,7 @@ const PostItem = () => {
                 rows="5"
                 value={formData.description}
                 onChange={e => setFormData({ ...formData, description: e.target.value })}
-                className="w-full glass-soft dark:glass-dark border border-white/60 dark:border-gray-700 rounded-2xl p-4 text-gray-900 dark:text-white focus:bg-white dark:focus:bg-gray-800 focus:border-primary-500 focus:ring-4 focus:ring-primary-500/20 outline-none transition-all font-medium resize-none placeholder:text-gray-400 dark:placeholder:text-gray-500 shadow-sm text-lg leading-relaxed"
+                className="w-full glass-soft dark:glass-dark border border-white/60 dark:border-gray-700 rounded-2xl p-3.5 text-gray-900 dark:text-white focus:bg-white dark:focus:bg-gray-800 focus:border-primary-500 focus:ring-4 focus:ring-primary-500/20 outline-none transition-all font-medium resize-none placeholder:text-gray-400 dark:placeholder:text-gray-500 shadow-sm text-sm leading-relaxed"
                 placeholder={analyzing ? "AI is describing..." : "Describe distinguishing features, contents, or how to claim it..."}
                 required
               />
@@ -260,7 +260,7 @@ const PostItem = () => {
               transition={{ type: "spring", stiffness: 400, damping: 10 }}
               type="submit"
               disabled={loading || analyzing}
-              className={`w-full py-5 rounded-[2rem] font-black text-xl flex items-center justify-center gap-3 transition-colors shadow-glow mt-4 ${loading ? 'bg-gray-200 dark:bg-gray-800 text-gray-500 cursor-not-allowed shadow-none' : 'bg-primary-600 hover:bg-primary-500 text-white border border-primary-500'
+              className={`w-full py-4 rounded-[2rem] font-black text-base flex items-center justify-center gap-3 transition-colors shadow-glow mt-4 ${loading ? 'bg-gray-200 dark:bg-gray-800 text-gray-500 cursor-not-allowed shadow-none' : 'bg-primary-600 hover:bg-primary-500 text-white border border-primary-500'
                 }`}
             >
               {loading ? <Loader className="animate-spin" /> : 'Publish Report'}

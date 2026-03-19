@@ -71,7 +71,7 @@ const ItemDetail = () => {
             </span>
           </div>
 
-          <h1 className="text-4xl md:text-5xl font-heading font-black text-gray-900 dark:text-white mb-8 leading-tight">
+          <h1 className="text-2xl md:text-3xl font-heading font-black text-gray-900 dark:text-white mb-6 leading-tight">
             {item.title}
           </h1>
 
@@ -81,13 +81,13 @@ const ItemDetail = () => {
             </div>
             <div>
               <span className="block text-xs font-black text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-1">Found Location</span>
-              <span className="text-xl font-bold text-gray-800 dark:text-gray-200">{item.location}</span>
+              <span className="text-base font-bold text-gray-800 dark:text-gray-200">{item.location}</span>
             </div>
           </div>
 
           <div className="mb-12 flex-grow">
             <span className="block text-xs font-black text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-4">Description</span>
-            <p className="text-gray-600 dark:text-gray-300 leading-relaxed text-lg font-medium">
+            <p className="text-gray-600 dark:text-gray-300 leading-relaxed text-sm font-medium">
               {item.description}
             </p>
           </div>
@@ -102,13 +102,13 @@ const ItemDetail = () => {
                 <div className="bg-gradient-to-br from-primary-400 to-primary-600 w-12 h-12 rounded-full flex items-center justify-center text-white shadow-md">
                   <User size={24} />
                 </div>
-                <span className="text-gray-900 dark:text-white font-bold text-lg truncate max-w-[150px]">{item.owner_id}</span>
+                <span className="text-gray-900 dark:text-white font-semibold text-sm truncate max-w-[150px]">{item.owner_id}</span>
               </div>
 
               {user?.email !== item.owner_id && (
                 <button
                   onClick={() => navigate(`/chat/${item.owner_id}`)}
-                  className="w-full sm:w-auto bg-primary-600 hover:bg-primary-500 text-white px-8 py-4 rounded-2xl font-black flex items-center justify-center gap-3 transition-all shadow-glow flex-shrink-0 text-lg"
+                  className="w-full sm:w-auto bg-primary-600 hover:bg-primary-500 text-white px-6 py-3 rounded-2xl font-bold flex items-center justify-center gap-2 transition-all shadow-glow flex-shrink-0 text-sm"
                 >
                   <MessageCircle size={20} /> Contact Owner
                 </button>

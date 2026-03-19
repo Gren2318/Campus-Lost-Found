@@ -100,7 +100,7 @@ const Home = () => {
             placeholder="Search keys, backpack, library..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full bg-gray-900/50 backdrop-blur-xl rounded-2xl py-4 pl-14 pr-6 text-white focus:bg-gray-900 focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 outline-none transition-all font-medium placeholder:text-gray-500 shadow-[0_0_30px_rgba(14,165,233,0.05)] text-lg border border-gray-800 z-10 relative"
+            className="w-full bg-gray-900/50 backdrop-blur-xl rounded-2xl py-3 pl-14 pr-6 text-white focus:bg-gray-900 focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 outline-none transition-all font-medium placeholder:text-gray-500 shadow-[0_0_30px_rgba(14,165,233,0.05)] text-sm border border-gray-800 z-10 relative"
           />
         </div>
       </motion.div>
