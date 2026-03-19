@@ -1,8 +1,10 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import Navbar from './components/ui/Navbar';
 import { AuthProvider } from './context/AuthContext';
 import { useAuth } from './context/useAuth';
+import { ToastProvider } from './context/ToastContext';
+import { ThemeProvider } from './context/ThemeContext';
 
+import Navbar from './components/ui/navbar';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Landing from './pages/Landing';
@@ -16,9 +18,7 @@ import AdminChatLog from './pages/AdminChatLog';
 
 const ProtectedRoute = ({ children }) => {
   const { user, loading } = useAuth();
-
   if (loading) return <div className="text-white text-center p-20">Loading...</div>;
-
   return user ? children : <Navigate to="/landing" replace />;
 };
 
@@ -32,9 +32,6 @@ const ConditionalNavbar = () => {
   const { user } = useAuth();
   return user ? <Navbar /> : null;
 };
-
-import { ToastProvider } from './context/ToastContext';
-import { ThemeProvider } from './context/ThemeContext';
 
 function App() {
   return (

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import api from '../services/api';
-import { ShieldAlert, Clock, ArrowRight, MessageSquare, Search } from 'lucide-react';
+import { ShieldAlert, Clock, ArrowRight, MessageSquare } from 'lucide-react';
 import { useToast } from '../context/ToastContext';
 import { motion } from 'framer-motion';
 
