@@ -1,8 +1,8 @@
-"use client";
+
 
 import React, { useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
-import { ArrowRight, BrainCircuit, MapPin } from 'lucide-react';
+import { ArrowRight, MapPin } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const cn = (...classes) => classes.filter(Boolean).join(' ');

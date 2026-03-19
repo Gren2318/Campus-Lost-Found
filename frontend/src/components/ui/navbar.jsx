@@ -1,14 +1,8 @@
-import { Home, Menu, PlusCircle, User, MessageCircle, ShieldAlert, X, MapPin } from "lucide-react";
+import { Home, Menu, PlusCircle, User, MessageCircle, ShieldAlert, MapPin } from "lucide-react";
 import * as React from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "../../context/useAuth";
 
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "./accordion";
 import { Button } from "./button";
 import {
   NavigationMenu,

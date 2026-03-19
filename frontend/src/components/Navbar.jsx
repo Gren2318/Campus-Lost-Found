@@ -8,12 +8,11 @@ import {
   Home,
   MessageCircle,
   ShieldAlert,
-  ShieldCheck,
   Menu,
   X,
   Map
 } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import ThemeToggle from './ThemeToggle';
 import AnimatedDoodle from './AnimatedDoodle';
 
