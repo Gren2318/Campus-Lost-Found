@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import Navbar from './components/ui/navbar';
+import Navbar from './components/ui/Navbar';
 import { AuthProvider } from './context/AuthContext';
 import { useAuth } from './context/useAuth';
 
@@ -40,81 +40,81 @@ function App() {
   return (
     <ThemeProvider>
       <ToastProvider>
-      <AuthProvider>
-        <Router>
-          <div className="min-h-screen bg-transparent font-sans flex text-gray-900 dark:text-gray-100 transition-colors duration-300 relative">
-            <ConditionalNavbar />
-            
-            <div className="flex-1 md:ml-20 w-full mb-20 md:mb-0 transition-all duration-300 mt-16 md:mt-0">
-              <Routes>
+        <AuthProvider>
+          <Router>
+            <div className="min-h-screen bg-transparent font-sans flex text-gray-900 dark:text-gray-100 transition-colors duration-300 relative">
+              <ConditionalNavbar />
 
-                <Route path="/" element={<RootRoute />} />
-              <Route path="/landing" element={<Landing />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/register" element={<Register />} />
+              <div className="flex-1 md:ml-20 w-full mb-20 md:mb-0 transition-all duration-300 mt-16 md:mt-0">
+                <Routes>
 
-              <Route
-                path="/items/:id"
-                element={
-                  <ProtectedRoute>
-                    <ItemDetail />
-                  </ProtectedRoute>
-                }
-              />
+                  <Route path="/" element={<RootRoute />} />
+                  <Route path="/landing" element={<Landing />} />
+                  <Route path="/login" element={<Login />} />
+                  <Route path="/register" element={<Register />} />
 
-              <Route
-                path="/post"
-                element={
-                  <ProtectedRoute>
-                    <PostItem />
-                  </ProtectedRoute>
-                }
-              />
+                  <Route
+                    path="/items/:id"
+                    element={
+                      <ProtectedRoute>
+                        <ItemDetail />
+                      </ProtectedRoute>
+                    }
+                  />
 
-              <Route
-                path="/profile"
-                element={
-                  <ProtectedRoute>
-                    <Profile />
-                  </ProtectedRoute>
-                }
-              />
+                  <Route
+                    path="/post"
+                    element={
+                      <ProtectedRoute>
+                        <PostItem />
+                      </ProtectedRoute>
+                    }
+                  />
 
-              <Route
-                path="/chat/:email"
-                element={
-                  <ProtectedRoute>
-                    <ChatPage />
-                  </ProtectedRoute>
-                }
-              />
+                  <Route
+                    path="/profile"
+                    element={
+                      <ProtectedRoute>
+                        <Profile />
+                      </ProtectedRoute>
+                    }
+                  />
 
-              <Route
-                path="/inbox"
-                element={
-                  <ProtectedRoute>
-                    <Inbox />
-                  </ProtectedRoute>
-                }
-              />
+                  <Route
+                    path="/chat/:email"
+                    element={
+                      <ProtectedRoute>
+                        <ChatPage />
+                      </ProtectedRoute>
+                    }
+                  />
 
-              <Route
-                path="/admin/logs"
-                element={
-                  <ProtectedRoute>
-                    <AdminChatLog />
-                  </ProtectedRoute>
-                }
-              />
+                  <Route
+                    path="/inbox"
+                    element={
+                      <ProtectedRoute>
+                        <Inbox />
+                      </ProtectedRoute>
+                    }
+                  />
 
-              <Route path="*" element={<Navigate to="/" />} />
+                  <Route
+                    path="/admin/logs"
+                    element={
+                      <ProtectedRoute>
+                        <AdminChatLog />
+                      </ProtectedRoute>
+                    }
+                  />
 
-              </Routes>
+                  <Route path="*" element={<Navigate to="/" />} />
+
+                </Routes>
+              </div>
             </div>
-          </div>
-        </Router>
-      </AuthProvider>
-    </ToastProvider>
+          </Router>
+        </AuthProvider>
+      </ToastProvider>
     </ThemeProvider>
   );
 }
