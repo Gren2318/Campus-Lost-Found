@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import Navbar from './components/Navbar';
+import Navbar from './components/ui/navbar';
 import { AuthProvider } from './context/AuthContext';
 import { useAuth } from './context/useAuth';
 
@@ -28,6 +28,11 @@ const RootRoute = () => {
   return user ? <Home /> : <Landing />;
 };
 
+const ConditionalNavbar = () => {
+  const { user } = useAuth();
+  return user ? <Navbar /> : null;
+};
+
 import { ToastProvider } from './context/ToastContext';
 import { ThemeProvider } from './context/ThemeContext';
 
@@ -38,7 +43,7 @@ function App() {
       <AuthProvider>
         <Router>
           <div className="min-h-screen bg-transparent font-sans flex text-gray-900 dark:text-gray-100 transition-colors duration-300 relative">
-            <Navbar />
+            <ConditionalNavbar />
             
             <div className="flex-1 md:ml-20 w-full mb-20 md:mb-0 transition-all duration-300 mt-16 md:mt-0">
               <Routes>
